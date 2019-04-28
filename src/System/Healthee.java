@@ -2,6 +2,8 @@ package System;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class Healthee {
     //MISC
@@ -13,20 +15,30 @@ public class Healthee {
     private Timeframe timeframe;
     private TotalIllnessHistory totalIllnessHistory;
 
-    //GUI ELEMENTS
+    //FRAME
     private JFrame window;
 
-    //GUI WINDOWS
-    private Container mainContainer;
-    private Container settingsContainer;
-    private Container specificEmployeeContainer;
-    private Container totalIllnessHistoryContainer;
+    //GUI PANELS
+    private JPanel mainPanel;
+    private JPanel settingsPanel;
+    private JPanel specificEmployeePanel;
+    private JPanel totalIllnessHistoryPanel;
+
+    private JPanel sideBarMenu;
 
     //GUI LAYOUTS
     private LayoutManager mainLayout;
     private LayoutManager settingsLayout;
     private LayoutManager specificEmployeeLayout;
     private LayoutManager totalIllnessHistoryLayout;
+
+    private LayoutManager sideBarMenuLayout;
+
+    //GUI ELEMENTS
+    private JButton speceficEmplyoeeButton;
+    private JButton homeButton;
+    private ActionListener homeButtonPressed;
+
 
     private Healthee() {
         //INIT SYSTEMS
@@ -37,18 +49,30 @@ public class Healthee {
 
         //INIT GUI ELEMENTS
         window = new JFrame("Healthee");
-        mainContainer = new Container();
-        mainLayout = new GridLayout(3,3);
+        mainLayout = new BorderLayout();
+        mainPanel = new JPanel(mainLayout);
 
-        settingsContainer = new Container();
-        settingsLayout = new GridLayout(3,3);
+        settingsLayout = new BorderLayout();
+        settingsPanel = new JPanel(settingsLayout);
 
-        specificEmployeeContainer = new Container();
-        specificEmployeeLayout = new GridLayout(3,3);
+        specificEmployeeLayout = new BorderLayout();
+        specificEmployeePanel = new JPanel(specificEmployeeLayout);
 
-        totalIllnessHistoryContainer = new Container();
-        totalIllnessHistoryLayout = new GridLayout(3,3);
+        totalIllnessHistoryLayout = new BorderLayout();
+        totalIllnessHistoryPanel = new JPanel(totalIllnessHistoryLayout);
 
+        sideBarMenuLayout = new GridLayout(10,1);
+        sideBarMenu = new JPanel(sideBarMenuLayout);
+
+        speceficEmplyoeeButton = new JButton("Lars Larsen");
+        homeButton = new JButton("Main Screen");
+
+        homeButtonPressed = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                openMainScreen();
+            }
+        };
     }
 
     public static void main(String args[]) {
@@ -59,15 +83,28 @@ public class Healthee {
     public void show() {
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //Pressing the windows X will terminate the program
         window.setSize(dim.width/4*3,dim.height/4*3); //Size of frame is 3/4 of screen resolution for width and height
-        setupMainScreen();
-    }
-
-    public void setupMainScreen() {
-        //window.setLayout(mainLayout);
-        window.setContentPane(mainContainer);
-        mainContainer.setLayout(mainLayout); // Layout is 3x3 grid layout. Some grid spaces will be merged
-
+        openMainScreen();
+        window.setContentPane(mainPanel);
         window.setLocationRelativeTo(null); //Sets the window to appear in the center of the main monitor
         window.setVisible(true); //Makes the frame visible
+    }
+
+    public void openMainScreen() {
+        mainPanel.setLayout(mainLayout); // Layout is a borderLayout
+        mainPanel.add(sideBarMenu, BorderLayout.WEST);
+        sideBarMenu.add(speceficEmplyoeeButton);
+        speceficEmplyoeeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                openSpecificEmployee();
+            }
+        });
+        mainPanel.setVisible(true);
+    }
+
+    public void openSpecificEmployee() {
+        mainPanel.setVisible(false);
+        window.setContentPane(specificEmployeePanel);
+
     }
 }
