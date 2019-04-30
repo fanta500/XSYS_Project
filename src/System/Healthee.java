@@ -1,5 +1,6 @@
 package System;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -39,6 +40,9 @@ public class Healthee {
     private JButton homeButton;
     private ActionListener homeButtonPressed;
 
+    //GUI GRAPHICS
+    private ImageIcon homeButtonIcon;
+
 
     private Healthee() {
         //INIT SYSTEMS
@@ -65,14 +69,42 @@ public class Healthee {
         sideBarMenu = new JPanel(sideBarMenuLayout);
 
         speceficEmplyoeeButton = new JButton("Lars Larsen");
-        homeButton = new JButton("Main Screen");
+        homeButton = new JButton();
 
+        try {
+            Image img = ImageIO.read(getClass().getResource("resources/home_button.png"));
+            homeButton.setIcon(new ImageIcon(img));
+        } catch (Exception ex) {
+            System.out.println(ex);
+        }
+
+        //Sidebar menu setup
         homeButtonPressed = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                System.out.println("Home Button pressed");
                 openMainScreen();
             }
         };
+        homeButton.addActionListener(homeButtonPressed);
+
+        //Setting up default settings for different views
+        //Main view
+        mainPanel.setLayout(mainLayout); // Layout is a borderLayout
+        mainPanel.add(sideBarMenu, BorderLayout.WEST);
+        mainPanel.add(speceficEmplyoeeButton,BorderLayout.CENTER);
+        speceficEmplyoeeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Specific Employee Button pressed");
+                openSpecificEmployee();
+            }
+        });
+
+        //Specific employee view
+        specificEmployeePanel.add(sideBarMenu,BorderLayout.WEST);
+        sideBarMenu.add(homeButton);
+        window.setContentPane(specificEmployeePanel);
     }
 
     public static void main(String args[]) {
@@ -90,21 +122,16 @@ public class Healthee {
     }
 
     public void openMainScreen() {
-        mainPanel.setLayout(mainLayout); // Layout is a borderLayout
-        mainPanel.add(sideBarMenu, BorderLayout.WEST);
-        sideBarMenu.add(speceficEmplyoeeButton);
-        speceficEmplyoeeButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                openSpecificEmployee();
-            }
-        });
+        specificEmployeePanel.setVisible(false);
+        settingsPanel.setVisible(false);
+        totalIllnessHistoryPanel.setVisible(false);
+        window.setContentPane(mainPanel);
         mainPanel.setVisible(true);
     }
 
     public void openSpecificEmployee() {
         mainPanel.setVisible(false);
         window.setContentPane(specificEmployeePanel);
-
+        specificEmployeePanel.setVisible(true);
     }
 }
