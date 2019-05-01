@@ -24,6 +24,7 @@ public class Healthee {
     //GUI PANELS
     private JPanel mainPanel;
     private JPanel mainCenterPanel;
+    private JPanel mainCenterTopRightPanel;
 
     private JPanel settingsPanel;
     private JPanel specificEmployeePanel;
@@ -34,6 +35,7 @@ public class Healthee {
     //GUI LAYOUTS
     private LayoutManager mainLayout;
     private LayoutManager mainCenterLayout;
+    private LayoutManager mainCenterTopRightLayout;
 
     private LayoutManager settingsLayout;
     private LayoutManager specificEmployeeLayout;
@@ -70,8 +72,10 @@ public class Healthee {
         //MAIN MENU
         mainLayout = new BorderLayout();
         mainCenterLayout = new GridLayout(2,2,5,5); //2x2 grid for the 4 main view action options
-        mainCenterPanel = new JPanel(mainCenterLayout);
+        mainCenterTopRightLayout = new GridBagLayout();
         mainPanel = new JPanel(mainLayout);
+        mainCenterPanel = new JPanel(mainCenterLayout);
+        mainCenterTopRightPanel = new JPanel(mainCenterTopRightLayout);
 
         //SETTINGS
         settingsLayout = new BorderLayout();
@@ -115,7 +119,6 @@ public class Healthee {
         timeFrameListModel.addElement("All Time");
 
         timeFrameList = new JList<>(timeFrameListModel);
-        //timeFrameList.setPreferredSize(new Dimension(100,125));
         timeFrameList.setFixedCellWidth((int)sideBarMenuWidth);
         timeFrameList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         timeFrameList.setLayoutOrientation(JList.VERTICAL);
@@ -156,11 +159,39 @@ public class Healthee {
         speceficEmplyoeeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //TODO: This has to not be hardcoded, but instead use a proper object reference later
-                lastView = "Specific Employee";
-                //returnButton.setText("Return to \n"+lastView);
+                mainPanel.setVisible(false);
+                sideBarMenu.remove(returnButton);
+                sideBarMenu.add(homeButton);
+                lastView = "Employee";
                 returnButton.setText("<html><center>"+"Return to"+"<br>"+lastView+"</center></html>");
                 openSpecificEmployee();
+            }
+        });
+        totalIllnessHustoryButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                mainPanel.setVisible(false);
+                sideBarMenu.remove(returnButton);
+                sideBarMenu.add(homeButton);
+                lastView = "Illness History";
+                returnButton.setText("<html><center>"+"Return to"+"<br>"+lastView+"</center></html>");
+                openTotalIllnessHistory();
+            }
+        });
+        returnButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (lastView.equals("Employee")) {
+                    mainPanel.setVisible(false);
+                    sideBarMenu.remove(returnButton);
+                    sideBarMenu.add(homeButton);
+                    openSpecificEmployee();
+                } else if (lastView.equals("Illness History")) {
+                    mainPanel.setVisible(false);
+                    sideBarMenu.remove(returnButton);
+                    sideBarMenu.add(homeButton);
+                    openTotalIllnessHistory();
+                }
             }
         });
     }
@@ -192,11 +223,14 @@ public class Healthee {
     }
 
     public void openSpecificEmployee() {
-        mainPanel.setVisible(false);
-        sideBarMenu.remove(returnButton);
-        sideBarMenu.add(homeButton);
         specificEmployeePanel.add(sideBarMenu,BorderLayout.WEST);
         window.setContentPane(specificEmployeePanel);
         specificEmployeePanel.setVisible(true);
+    }
+
+    private void openTotalIllnessHistory() {
+        totalIllnessHistoryPanel.add(sideBarMenu,BorderLayout.WEST);
+        window.setContentPane(totalIllnessHistoryPanel);
+        totalIllnessHistoryPanel.setVisible(true);
     }
 }
