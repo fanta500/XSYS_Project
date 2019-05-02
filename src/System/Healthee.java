@@ -1,9 +1,16 @@
 package System;
 
+import Data.Employee;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+/**
+ * @author Alexander Schacht
+ * This class is a complete GUI with included "fake-it" data to encapsulate the proof of concept.
+ */
 
 public class Healthee {
     //MISC
@@ -44,7 +51,7 @@ public class Healthee {
     private LayoutManager sideBarMenuLayout;
 
     //GUI ELEMENTS
-    private JButton speceficEmplyoeeButton;
+    private JButton specificEmployeeButton;
     private JButton totalIllnessHustoryButton;
     private JButton illTodayButton;
     private JButton aggIllnessDaysButton;
@@ -57,6 +64,18 @@ public class Healthee {
 
     //GUI GRAPHICS
     private ImageIcon homeButtonIcon;
+
+    //EMPLOYEE DATA
+    private JTable employeeList;
+    private JScrollPane employeeListScrollPane;
+
+    private Employee emp1;
+    private Employee emp2;
+    private Employee emp3;
+    private Employee emp4;
+    private Employee emp5;
+    private Employee emp6;
+    private Employee emp7;
 
 
     private Healthee() {
@@ -75,8 +94,8 @@ public class Healthee {
         mainCenterTopRightLayout = new GridBagLayout();
         mainPanel = new JPanel(mainLayout);
         mainCenterPanel = new JPanel(mainCenterLayout);
-        mainCenterTopRightPanel = new JPanel(mainCenterTopRightLayout);
-        leftPagePanel = new JPanel();
+        mainCenterTopRightPanel = new JPanel();
+        leftPagePanel = new JPanel(); //Default layout is borderlayout. This is used to contain the sidebarmenu, in the north part of the borderlayout, to force top aligned
 
         //SETTINGS
         settingsLayout = new BorderLayout();
@@ -91,8 +110,8 @@ public class Healthee {
         totalIllnessHistoryPanel = new JPanel(totalIllnessHistoryLayout);
 
         //BUTTONS
-        speceficEmplyoeeButton = new JButton("Specific Employee");
-        speceficEmplyoeeButton.setBackground(Color.white);
+        specificEmployeeButton = new JButton("Specific Employee");
+        specificEmployeeButton.setBackground(Color.white);
         illTodayButton = new JButton("Ill Today");
         illTodayButton.setBackground(Color.white);
         totalIllnessHustoryButton = new JButton("Total Illness History");
@@ -155,10 +174,10 @@ public class Healthee {
         mainPanel.add(leftPagePanel, BorderLayout.WEST);
         mainPanel.add(mainCenterPanel, BorderLayout.CENTER);
         mainCenterPanel.add(illTodayButton);
-        mainCenterPanel.add(speceficEmplyoeeButton);
+        mainCenterPanel.add(mainCenterTopRightPanel);
         mainCenterPanel.add(totalIllnessHustoryButton);
         mainCenterPanel.add(aggIllnessDaysButton);
-        speceficEmplyoeeButton.addActionListener(new ActionListener() {
+        specificEmployeeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 mainPanel.setVisible(false);
@@ -196,6 +215,7 @@ public class Healthee {
                 }
             }
         });
+        createEmployees();
     }
 
     public static void main(String args[]) {
@@ -234,5 +254,41 @@ public class Healthee {
         totalIllnessHistoryPanel.add(leftPagePanel,BorderLayout.WEST);
         window.setContentPane(totalIllnessHistoryPanel);
         totalIllnessHistoryPanel.setVisible(true);
+    }
+
+    private void createEmployees() {
+        emp1 = new Employee(29, "Stine Larsen", "CEO");
+        emp2 = new Employee(33, "Peter Hansen", "Engineer");
+        emp3 = new Employee(26, "Maya Shultz", "Designer");
+        emp4 = new Employee(24, "Pernille Jensen", "Marketing");
+        emp5 = new Employee(30, "Laurel Markson", "Sales");
+        emp6 = new Employee(30, "Willem de Lange", "Designer");
+        emp7 = new Employee(32, "Emma May", "Finance");
+
+        String[][] employeeData = {
+                {emp1.getName(), emp1.getPosition()},
+                {emp2.getName(), emp2.getPosition()},
+                {emp3.getName(), emp3.getPosition()},
+                {emp4.getName(), emp4.getPosition()},
+                {emp5.getName(), emp5.getPosition()},
+                {emp6.getName(), emp6.getPosition()},
+                {emp7.getName(), emp7.getPosition()},
+        };
+        String[] columnNames = {"Name", "Position"};
+        employeeList = new JTable(employeeData, columnNames);
+        
+        employeeList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        employeeListScrollPane = new JScrollPane(employeeList);
+
+        mainCenterTopRightPanel.add(employeeListScrollPane);
+        /*
+        System.out.println("Total Illness for emp1: "+emp1.getSickDays().get(6));
+        System.out.println("Total Illness for emp2: "+emp2.getSickDays().get(6));
+        System.out.println("Total Illness for emp3: "+emp3.getSickDays().get(6));
+        System.out.println("Total Illness for emp4: "+emp4.getSickDays().get(6));
+        System.out.println("Total Illness for emp5: "+emp5.getSickDays().get(6));
+        System.out.println("Total Illness for emp6: "+emp6.getSickDays().get(6));
+        System.out.println("Total Illness for emp7: "+emp7.getSickDays().get(6));
+        */
     }
 }
