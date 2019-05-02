@@ -1,6 +1,5 @@
 package System;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -31,6 +30,7 @@ public class Healthee {
     private JPanel totalIllnessHistoryPanel;
 
     private JPanel sideBarMenu;
+    private JPanel leftPagePanel;
 
     //GUI LAYOUTS
     private LayoutManager mainLayout;
@@ -76,6 +76,7 @@ public class Healthee {
         mainPanel = new JPanel(mainLayout);
         mainCenterPanel = new JPanel(mainCenterLayout);
         mainCenterTopRightPanel = new JPanel(mainCenterTopRightLayout);
+        leftPagePanel = new JPanel();
 
         //SETTINGS
         settingsLayout = new BorderLayout();
@@ -150,7 +151,8 @@ public class Healthee {
 
         //Setting up default settings for different views
         //Main view
-        mainPanel.add(sideBarMenu, BorderLayout.WEST);
+        leftPagePanel.add(sideBarMenu, BorderLayout.NORTH);
+        mainPanel.add(leftPagePanel, BorderLayout.WEST);
         mainPanel.add(mainCenterPanel, BorderLayout.CENTER);
         mainCenterPanel.add(illTodayButton);
         mainCenterPanel.add(speceficEmplyoeeButton);
@@ -217,19 +219,22 @@ public class Healthee {
         totalIllnessHistoryPanel.setVisible(false);
         sideBarMenu.remove(homeButton);
         sideBarMenu.add(returnButton);
-        mainPanel.add(sideBarMenu,BorderLayout.WEST);
+        leftPagePanel.add(sideBarMenu, BorderLayout.NORTH);
+        mainPanel.add(leftPagePanel, BorderLayout.WEST);
         window.setContentPane(mainPanel);
         mainPanel.setVisible(true);
     }
 
     public void openSpecificEmployee() {
-        specificEmployeePanel.add(sideBarMenu,BorderLayout.WEST);
+        leftPagePanel.add(sideBarMenu, BorderLayout.NORTH);
+        specificEmployeePanel.add(leftPagePanel,BorderLayout.WEST);
         window.setContentPane(specificEmployeePanel);
         specificEmployeePanel.setVisible(true);
     }
 
     private void openTotalIllnessHistory() {
-        totalIllnessHistoryPanel.add(sideBarMenu,BorderLayout.WEST);
+        leftPagePanel.add(sideBarMenu, BorderLayout.NORTH);
+        totalIllnessHistoryPanel.add(leftPagePanel,BorderLayout.WEST);
         window.setContentPane(totalIllnessHistoryPanel);
         totalIllnessHistoryPanel.setVisible(true);
     }
