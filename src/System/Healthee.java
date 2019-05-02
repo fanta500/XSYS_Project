@@ -219,21 +219,18 @@ public class Healthee {
         totalIllnessHistoryPanel.setVisible(false);
         sideBarMenu.remove(homeButton);
         sideBarMenu.add(returnButton);
-        leftPagePanel.add(sideBarMenu, BorderLayout.NORTH);
         mainPanel.add(leftPagePanel, BorderLayout.WEST);
         window.setContentPane(mainPanel);
         mainPanel.setVisible(true);
     }
 
     public void openSpecificEmployee() {
-        leftPagePanel.add(sideBarMenu, BorderLayout.NORTH);
         specificEmployeePanel.add(leftPagePanel,BorderLayout.WEST);
         window.setContentPane(specificEmployeePanel);
         specificEmployeePanel.setVisible(true);
     }
 
     private void openTotalIllnessHistory() {
-        leftPagePanel.add(sideBarMenu, BorderLayout.NORTH);
         totalIllnessHistoryPanel.add(leftPagePanel,BorderLayout.WEST);
         window.setContentPane(totalIllnessHistoryPanel);
         totalIllnessHistoryPanel.setVisible(true);
