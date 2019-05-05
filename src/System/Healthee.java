@@ -6,6 +6,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 /**
  * @author Alexander Schacht
@@ -159,7 +161,6 @@ public class Healthee {
         sideBarMenuConstraints.gridy = 2;
         sideBarMenu.add(timeFrameList, sideBarMenuConstraints);
 
-
         //Sidebar menu setup
         homeButton.addActionListener(new ActionListener() {
             @Override
@@ -180,22 +181,12 @@ public class Healthee {
         specificEmployeeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                mainPanel.setVisible(false);
-                sideBarMenu.remove(returnButton);
-                sideBarMenu.add(homeButton);
-                lastView = "Employee";
-                returnButton.setText("<html><center>"+"Return to"+"<br>"+lastView+"</center></html>");
                 openSpecificEmployee();
             }
         });
         totalIllnessHustoryButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                mainPanel.setVisible(false);
-                sideBarMenu.remove(returnButton);
-                sideBarMenu.add(homeButton);
-                lastView = "Illness History";
-                returnButton.setText("<html><center>"+"Return to"+"<br>"+lastView+"</center></html>");
                 openTotalIllnessHistory();
             }
         });
@@ -204,13 +195,9 @@ public class Healthee {
             public void actionPerformed(ActionEvent e) {
                 if (lastView.equals("Employee")) {
                     mainPanel.setVisible(false);
-                    sideBarMenu.remove(returnButton);
-                    sideBarMenu.add(homeButton);
                     openSpecificEmployee();
                 } else if (lastView.equals("Illness History")) {
                     mainPanel.setVisible(false);
-                    sideBarMenu.remove(returnButton);
-                    sideBarMenu.add(homeButton);
                     openTotalIllnessHistory();
                 }
             }
@@ -245,13 +232,21 @@ public class Healthee {
     }
 
     public void openSpecificEmployee() {
+        mainPanel.setVisible(false);
         specificEmployeePanel.add(leftPagePanel,BorderLayout.WEST);
+        lastView = "Employee";
+        returnButton.setText("<html><center>"+"Return to"+"<br>"+lastView+"</center></html>");
+        setToHomeButton();
         window.setContentPane(specificEmployeePanel);
         specificEmployeePanel.setVisible(true);
     }
 
     private void openTotalIllnessHistory() {
+        mainPanel.setVisible(false);
         totalIllnessHistoryPanel.add(leftPagePanel,BorderLayout.WEST);
+        lastView = "Illness History";
+        returnButton.setText("<html><center>"+"Return to"+"<br>"+lastView+"</center></html>");
+        setToHomeButton();
         window.setContentPane(totalIllnessHistoryPanel);
         totalIllnessHistoryPanel.setVisible(true);
     }
@@ -276,10 +271,20 @@ public class Healthee {
         };
         String[] columnNames = {"Name", "Position"};
         employeeList = new JTable(employeeData, columnNames);
-        
+        employeeList.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                JTable target = (JTable) e.getSource();
+                int row = target.getSelectedRow();
+                if (row == 0) {
+                    openSpecificEmployee();
+                }
+            }
+        });
+
         employeeList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         employeeListScrollPane = new JScrollPane(employeeList);
-
+        employeeListScrollPane.setPreferredSize(new Dimension(mainCenterPanel.getWidth(),mainCenterPanel.getHeight()));
         mainCenterTopRightPanel.add(employeeListScrollPane);
         /*
         System.out.println("Total Illness for emp1: "+emp1.getSickDays().get(6));
@@ -290,5 +295,10 @@ public class Healthee {
         System.out.println("Total Illness for emp6: "+emp6.getSickDays().get(6));
         System.out.println("Total Illness for emp7: "+emp7.getSickDays().get(6));
         */
+    }
+
+    private void setToHomeButton() {
+        sideBarMenu.remove(returnButton);
+        sideBarMenu.add(homeButton);
     }
 }
