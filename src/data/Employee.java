@@ -24,27 +24,27 @@ public class Employee {
         sickDays.add(sickDaysLastWeek);
         sickDayCeiling += 5;
 
-        int sickDaysLast2Weeks = random.nextInt(sickDayCeiling);
+        int sickDaysLast2Weeks = random.nextInt(sickDayCeiling)+sickDaysLastWeek;
         sickDays.add(sickDaysLast2Weeks);
         sickDayCeiling += 5;
 
-        int sickDaysLastMonth = random.nextInt(sickDayCeiling);
+        int sickDaysLastMonth = random.nextInt(sickDayCeiling)+sickDaysLast2Weeks;
         sickDays.add(sickDaysLastMonth);
         sickDayCeiling += 5;
 
-        int sickDaysLast3Months = random.nextInt(sickDayCeiling);
+        int sickDaysLast3Months = random.nextInt(sickDayCeiling)+sickDaysLastMonth;
         sickDays.add(sickDaysLast3Months);
         sickDayCeiling += 5;
 
-        int sickDaysLast6Months = random.nextInt(sickDayCeiling);
+        int sickDaysLast6Months = random.nextInt(sickDayCeiling)+sickDaysLast3Months;
         sickDays.add(sickDaysLast6Months);
         sickDayCeiling += 5;
 
-        int sickDaysLastYear = random.nextInt(sickDayCeiling);
+        int sickDaysLastYear = random.nextInt(sickDayCeiling)+sickDaysLast6Months;
         sickDays.add(sickDaysLastYear);
         sickDayCeiling += 5;
 
-        int sickDaysAllTime = random.nextInt(sickDayCeiling);
+        int sickDaysAllTime = random.nextInt(sickDayCeiling)+sickDaysLastYear;
         sickDays.add(sickDaysAllTime);
     }
 

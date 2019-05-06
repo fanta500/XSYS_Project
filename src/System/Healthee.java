@@ -93,10 +93,10 @@ public class Healthee {
         //MAIN MENU
         mainLayout = new BorderLayout();
         mainCenterLayout = new GridLayout(2,2,5,5); //2x2 grid for the 4 main view action options
-        mainCenterTopRightLayout = new GridBagLayout();
+        //mainCenterTopRightLayout = new GridBagLayout();
         mainPanel = new JPanel(mainLayout);
         mainCenterPanel = new JPanel(mainCenterLayout);
-        mainCenterTopRightPanel = new JPanel();
+        //mainCenterTopRightPanel = new JPanel();
         leftPagePanel = new JPanel(); //Default layout is borderlayout. This is used to contain the sidebarmenu, in the north part of the borderlayout, to force top aligned
 
         //SETTINGS
@@ -141,6 +141,7 @@ public class Healthee {
         timeFrameListModel.addElement("All Time");
 
         timeFrameList = new JList<>(timeFrameListModel);
+        timeFrameList.setSelectedIndex(0); //Sets the selected option to the first one in the time frame list
         timeFrameList.setFixedCellWidth((int)sideBarMenuWidth);
         timeFrameList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         timeFrameList.setLayoutOrientation(JList.VERTICAL);
@@ -174,8 +175,12 @@ public class Healthee {
         leftPagePanel.add(sideBarMenu, BorderLayout.NORTH);
         mainPanel.add(leftPagePanel, BorderLayout.WEST);
         mainPanel.add(mainCenterPanel, BorderLayout.CENTER);
+
+
         mainCenterPanel.add(illTodayButton);
-        mainCenterPanel.add(mainCenterTopRightPanel);
+
+        createEmployees();
+
         mainCenterPanel.add(totalIllnessHustoryButton);
         mainCenterPanel.add(aggIllnessDaysButton);
         specificEmployeeButton.addActionListener(new ActionListener() {
@@ -202,7 +207,7 @@ public class Healthee {
                 }
             }
         });
-        createEmployees();
+
     }
 
     public static void main(String args[]) {
@@ -279,22 +284,23 @@ public class Healthee {
                 if (row == 0) {
                     openSpecificEmployee();
                 }
+                else if (row == 1) {
+                    openSpecificEmployee();
+                }
+                else if (row == 2) {
+                    openSpecificEmployee();
+                }
+                openSpecificEmployee();
             }
         });
 
         employeeList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         employeeListScrollPane = new JScrollPane(employeeList);
+        int scrollPaneWidth = totalIllnessHustoryButton.getWidth();
+        System.out.println(scrollPaneWidth);
+
         employeeListScrollPane.setPreferredSize(new Dimension(mainCenterPanel.getWidth(),mainCenterPanel.getHeight()));
-        mainCenterTopRightPanel.add(employeeListScrollPane);
-        /*
-        System.out.println("Total Illness for emp1: "+emp1.getSickDays().get(6));
-        System.out.println("Total Illness for emp2: "+emp2.getSickDays().get(6));
-        System.out.println("Total Illness for emp3: "+emp3.getSickDays().get(6));
-        System.out.println("Total Illness for emp4: "+emp4.getSickDays().get(6));
-        System.out.println("Total Illness for emp5: "+emp5.getSickDays().get(6));
-        System.out.println("Total Illness for emp6: "+emp6.getSickDays().get(6));
-        System.out.println("Total Illness for emp7: "+emp7.getSickDays().get(6));
-        */
+        mainCenterPanel.add(employeeListScrollPane);
     }
 
     private void setToHomeButton() {
