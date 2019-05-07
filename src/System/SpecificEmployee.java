@@ -18,7 +18,9 @@ public class SpecificEmployee {
     private JPanel specificEmployeePanel;
     private JPanel employeeDetailsPanel;
     private JPanel employeeDetailsPanelNested;
-    private JTextArea employeeDetailsText;
+    private JTextArea employeeNameText;
+    private JTextArea employeeAgeText;
+    private JTextArea employeePositionText;
 
     public SpecificEmployee() {
         setupGUI();
@@ -26,30 +28,49 @@ public class SpecificEmployee {
 
     private void setupGUI() {
         initPanels();
-        employeeDetailsText = new JTextArea(); //Text area for employee details
-        employeeDetailsText.setFont(new Font("P", Font.PLAIN, 24)); //Setting font size
-        employeeDetailsText.setEditable(false); //Making details non-editable
-
-
-
+        setupEmployeeText();
         addComponents();
+    }
+
+    private void setupEmployeeText() {
+        employeeAgeText = new JTextArea(); //Text area for employee age
+        employeeNameText = new JTextArea(); //Text area for employee name
+        employeePositionText = new JTextArea(); //Text area for employee position
+        employeeAgeText.setFont(new Font("P", Font.PLAIN, 24)); //Setting font size
+        employeeNameText.setFont(new Font("P", Font.PLAIN, 54)); //Setting font size
+        employeePositionText.setFont(new Font("P", Font.PLAIN, 24)); //Setting font size
+        employeeAgeText.setEditable(false); //Making details non-editable
+        employeeNameText.setEditable(false); //Making details non-editable
+        employeePositionText.setEditable(false); //Making details non-editable
+        employeeAgeText.setOpaque(false); //Remove the white backdrop
+        employeeNameText.setOpaque(false); //Remove the white backdrop
+        employeePositionText.setOpaque(false); //Remove the white backdrop
     }
 
     private void addComponents() {
         GridBagConstraints gridBagConstraints = new GridBagConstraints(); //making GridBagLayoutConstraints to set position of elements within
-        gridBagConstraints.insets = new Insets(0,5,0,0);
+        gridBagConstraints.insets = new Insets(15,15,0,0);
         gridBagConstraints.anchor = GridBagConstraints.FIRST_LINE_START;
         try {
-            BufferedImage image = ImageIO.read(new File("D:/coding_stuff/XSYS_Project/src/resources/profile_picture.png"));
+            BufferedImage image = ImageIO.read(new File("D:/coding_stuff/XSYS_Project/src/resources/profile_picture_small.png"));
             JLabel label = new JLabel(new ImageIcon(image));
             employeeDetailsPanelNested.add(label, gridBagConstraints);
         } catch (IOException e) {
             System.out.println("Image could not be found");
         }
-        gridBagConstraints.anchor = GridBagConstraints.PAGE_START;
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.anchor = GridBagConstraints.LINE_START;
+        employeeDetailsPanelNested.add(employeeNameText, gridBagConstraints);
+        gridBagConstraints.anchor = GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        employeeDetailsPanelNested.add(employeeAgeText, gridBagConstraints);
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        employeeDetailsPanelNested.add(employeePositionText, gridBagConstraints);
+
         employeeDetailsPanel.add(employeeDetailsPanelNested, BorderLayout.WEST); //adding final panel to GUI
         specificEmployeePanel.add(employeeDetailsPanel, BorderLayout.NORTH); //adding employee details panel
-        employeeDetailsPanelNested.add(employeeDetailsText, gridBagConstraints);
     }
 
     private void initPanels() {
@@ -63,8 +84,9 @@ public class SpecificEmployee {
         this.position = position;
         this.age = age;
         this.sickDays = sickDays;
-
-        employeeDetailsText.setText(name + "\n" + age + " years old \n" + position);
+        employeeNameText.setText(name);
+        employeePositionText.setText(position);
+        employeeAgeText.setText(age + " years old");
     }
 
     public JPanel getJPanel() {

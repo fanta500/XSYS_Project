@@ -22,11 +22,11 @@ public class Employee {
 
         int sickDaysLastWeek = random.nextInt(sickDayCeiling);
         sickDays.add(sickDaysLastWeek);
-        sickDayCeiling += 5;
+        sickDayCeiling += 2;
 
         int sickDaysLast2Weeks = random.nextInt(sickDayCeiling)+sickDaysLastWeek;
         sickDays.add(sickDaysLast2Weeks);
-        sickDayCeiling += 5;
+        sickDayCeiling += 2;
 
         int sickDaysLastMonth = random.nextInt(sickDayCeiling)+sickDaysLast2Weeks;
         sickDays.add(sickDaysLastMonth);

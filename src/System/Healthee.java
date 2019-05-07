@@ -2,12 +2,16 @@ package System;
 
 import Data.Employee;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -65,7 +69,6 @@ public class Healthee {
     private Employee emp5;
     private Employee emp6;
     private Employee emp7;
-
 
     private Healthee() {
         //INIT SYSTEMS
@@ -132,8 +135,11 @@ public class Healthee {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (lastView.equals("Employee")) {
-                    //mainPanel.setVisible(false);
-                    //openSpecificEmployee();
+                    mainPanel.setVisible(false);
+                    specificEmployeePanel.add(leftPagePanel,BorderLayout.WEST);
+                    setToHomeButton();
+                    window.setContentPane(specificEmployeePanel);
+                    specificEmployeePanel.setVisible(true);
                 } else if (lastView.equals("Illness History")) {
                     mainPanel.setVisible(false);
                     openTotalIllnessHistory();
@@ -173,8 +179,17 @@ public class Healthee {
         aggIllnessDaysButton.setBackground(Color.white);
 
         Dimension sideBarMenuButtonDim = new Dimension((int)sideBarMenuWidth,(int)sideBarMenuWidth);
-        homeButton = new JButton("Home");
-        homeButton.setBackground(Color.white);
+        homeButton = new JButton();
+        try {
+            BufferedImage image = ImageIO.read(new File("D:/coding_stuff/XSYS_Project/src/resources/home_button_small.png"));
+            homeButton.setIcon(new ImageIcon(image));
+            homeButton.setOpaque(false);
+            homeButton.setContentAreaFilled(false);
+            homeButton.setBorderPainted(false);
+        } catch (IOException e) {
+            System.out.println("Image could not be found");
+        }
+        //homeButton.setBackground(Color.white);
         homeButton.setPreferredSize(sideBarMenuButtonDim);
 
         returnButton = new JButton("Return to \n"+lastView);
@@ -291,7 +306,6 @@ public class Healthee {
         });
         employeeList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         employeeListScrollPane = new JScrollPane(employeeList);
-
     }
 
     private void setToHomeButton() {
