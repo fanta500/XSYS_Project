@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 
 /**
  * @author Alexander Schacht
@@ -19,6 +20,7 @@ public class Healthee {
     private Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
     private double sideBarMenuWidth = dim.getWidth()/20;
     private String lastView = "";
+    private ArrayList<Employee> employees;
 
     //MODULES
     private Settings settings;
@@ -32,7 +34,6 @@ public class Healthee {
     //GUI PANELS
     private JPanel mainPanel;
     private JPanel mainCenterPanel;
-    private JPanel mainCenterTopRightPanel;
 
     private JPanel settingsPanel;
     private JPanel specificEmployeePanel;
@@ -44,7 +45,6 @@ public class Healthee {
     //GUI LAYOUTS
     private LayoutManager mainLayout;
     private LayoutManager mainCenterLayout;
-    private LayoutManager mainCenterTopRightLayout;
 
     private LayoutManager settingsLayout;
     private LayoutManager specificEmployeeLayout;
@@ -63,9 +63,6 @@ public class Healthee {
 
     private JList<DefaultListModel> timeFrameList;
     private DefaultListModel timeFrameListModel;
-
-    //GUI GRAPHICS
-    private ImageIcon homeButtonIcon;
 
     //EMPLOYEE DATA
     private JTable employeeList;
@@ -176,19 +173,11 @@ public class Healthee {
         mainPanel.add(leftPagePanel, BorderLayout.WEST);
         mainPanel.add(mainCenterPanel, BorderLayout.CENTER);
 
-
         mainCenterPanel.add(illTodayButton);
-
         createEmployees();
-
         mainCenterPanel.add(totalIllnessHustoryButton);
         mainCenterPanel.add(aggIllnessDaysButton);
-        specificEmployeeButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                openSpecificEmployee();
-            }
-        });
+
         totalIllnessHustoryButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -199,15 +188,14 @@ public class Healthee {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (lastView.equals("Employee")) {
-                    mainPanel.setVisible(false);
-                    openSpecificEmployee();
+                    //mainPanel.setVisible(false);
+                    //openSpecificEmployee();
                 } else if (lastView.equals("Illness History")) {
                     mainPanel.setVisible(false);
                     openTotalIllnessHistory();
                 }
             }
         });
-
     }
 
     public static void main(String args[]) {
@@ -236,9 +224,11 @@ public class Healthee {
         mainPanel.setVisible(true);
     }
 
-    public void openSpecificEmployee() {
+    public void openSpecificEmployee(String name, String position, int age, ArrayList<Integer> sickDays) {
         mainPanel.setVisible(false);
+        specificEmployee.setEmployeeDetails(name, position, age, sickDays); //modifies the specificEmployee object to display the correct information
         specificEmployeePanel.add(leftPagePanel,BorderLayout.WEST);
+        specificEmployeePanel.add(specificEmployee.getJPanel(),BorderLayout.CENTER); //adds the panel that the specificEmployee class returns to the center of the panel
         lastView = "Employee";
         returnButton.setText("<html><center>"+"Return to"+"<br>"+lastView+"</center></html>");
         setToHomeButton();
@@ -265,6 +255,15 @@ public class Healthee {
         emp6 = new Employee(30, "Willem de Lange", "Designer");
         emp7 = new Employee(32, "Emma May", "Finance");
 
+        employees = new ArrayList<>();
+        employees.add(emp1);
+        employees.add(emp2);
+        employees.add(emp3);
+        employees.add(emp4);
+        employees.add(emp5);
+        employees.add(emp6);
+        employees.add(emp7);
+
         String[][] employeeData = {
                 {emp1.getName(), emp1.getPosition()},
                 {emp2.getName(), emp2.getPosition()},
@@ -281,24 +280,14 @@ public class Healthee {
             public void mouseClicked(MouseEvent e) {
                 JTable target = (JTable) e.getSource();
                 int row = target.getSelectedRow();
-                if (row == 0) {
-                    openSpecificEmployee();
-                }
-                else if (row == 1) {
-                    openSpecificEmployee();
-                }
-                else if (row == 2) {
-                    openSpecificEmployee();
-                }
-                openSpecificEmployee();
+                openSpecificEmployee(employees.get(row).getName(),
+                                     employees.get(row).getPosition(),
+                                     employees.get(row).getAge(),
+                                     employees.get(row).getSickDays());
             }
         });
-
         employeeList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         employeeListScrollPane = new JScrollPane(employeeList);
-        int scrollPaneWidth = totalIllnessHustoryButton.getWidth();
-        System.out.println(scrollPaneWidth);
-
         employeeListScrollPane.setPreferredSize(new Dimension(mainCenterPanel.getWidth(),mainCenterPanel.getHeight()));
         mainCenterPanel.add(employeeListScrollPane);
     }
