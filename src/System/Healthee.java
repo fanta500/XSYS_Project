@@ -42,16 +42,6 @@ public class Healthee {
     private JPanel sideBarMenu;
     private JPanel leftPagePanel;
 
-    //GUI LAYOUTS
-    private LayoutManager mainLayout;
-    private LayoutManager mainCenterLayout;
-
-    private LayoutManager settingsLayout;
-    private LayoutManager specificEmployeeLayout;
-    private LayoutManager totalIllnessHistoryLayout;
-
-    private LayoutManager sideBarMenuLayout;
-
     //GUI ELEMENTS
     private JButton specificEmployeeButton;
     private JButton totalIllnessHustoryButton;
@@ -88,76 +78,27 @@ public class Healthee {
         window = new JFrame("Healthee");
 
         //MAIN MENU
-        mainLayout = new BorderLayout();
-        mainCenterLayout = new GridLayout(2,2,5,5); //2x2 grid for the 4 main view action options
-        //mainCenterTopRightLayout = new GridBagLayout();
-        mainPanel = new JPanel(mainLayout);
-        mainCenterPanel = new JPanel(mainCenterLayout);
-        //mainCenterTopRightPanel = new JPanel();
-        leftPagePanel = new JPanel(); //Default layout is borderlayout. This is used to contain the sidebarmenu, in the north part of the borderlayout, to force top aligned
+        mainPanel = new JPanel(new BorderLayout(5,5));
+        mainCenterPanel = new JPanel(new GridLayout(2,2,5,5));
+        leftPagePanel = new JPanel(new BorderLayout()); //Default layout is borderlayout. This is used to contain the sidebarmenu, in the north part of the borderlayout, to force top aligned
 
         //SETTINGS
-        settingsLayout = new BorderLayout();
-        settingsPanel = new JPanel(settingsLayout);
+        settingsPanel = new JPanel(new BorderLayout());
 
         //SPECIFIC EMPLOYEE
-        specificEmployeeLayout = new BorderLayout();
-        specificEmployeePanel = new JPanel(specificEmployeeLayout);
+        specificEmployeePanel = new JPanel(new BorderLayout());
 
         //TOTAL ILLNESS HISTORY
-        totalIllnessHistoryLayout = new BorderLayout();
-        totalIllnessHistoryPanel = new JPanel(totalIllnessHistoryLayout);
+        totalIllnessHistoryPanel = new JPanel(new BorderLayout());
 
         //BUTTONS
-        specificEmployeeButton = new JButton("Specific Employee");
-        specificEmployeeButton.setBackground(Color.white);
-        illTodayButton = new JButton("Ill Today");
-        illTodayButton.setBackground(Color.white);
-        totalIllnessHustoryButton = new JButton("Total Illness History");
-        totalIllnessHustoryButton.setBackground(Color.white);
-        aggIllnessDaysButton = new JButton("Agg. Illness Days");
-        aggIllnessDaysButton.setBackground(Color.white);
-
-        Dimension sideBarMenuButtonDim = new Dimension((int)sideBarMenuWidth,(int)sideBarMenuWidth);
-        homeButton = new JButton("Home");
-        homeButton.setBackground(Color.white);
-        homeButton.setPreferredSize(sideBarMenuButtonDim);
-
-        returnButton = new JButton("Return to \n"+lastView);
-        returnButton.setBackground(Color.white);
-        returnButton.setPreferredSize(sideBarMenuButtonDim);
+        setupButtons();
 
         //TIME FRAME LIST SETUP
-        timeFrameListModel = new DefaultListModel<>();
-        timeFrameListModel.addElement("Past Week");
-        timeFrameListModel.addElement("Past 2 Weeks");
-        timeFrameListModel.addElement("Past Month");
-        timeFrameListModel.addElement("Past 3 Months");
-        timeFrameListModel.addElement("Past 6 Months");
-        timeFrameListModel.addElement("Past Year");
-        timeFrameListModel.addElement("All Time");
-
-        timeFrameList = new JList<>(timeFrameListModel);
-        timeFrameList.setSelectedIndex(0); //Sets the selected option to the first one in the time frame list
-        timeFrameList.setFixedCellWidth((int)sideBarMenuWidth);
-        timeFrameList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        timeFrameList.setLayoutOrientation(JList.VERTICAL);
+        setupTimeFrameList();
 
         //SIDEBAR
-        GridBagConstraints sideBarMenuConstraints = new GridBagConstraints();
-        sideBarMenuConstraints.gridx = 0;
-        sideBarMenuConstraints.gridy = 0;
-        sideBarMenuConstraints.anchor = GridBagConstraints.FIRST_LINE_START;
-        sideBarMenuLayout = new GridBagLayout();
-        sideBarMenu = new JPanel(sideBarMenuLayout);
-        sideBarMenu.add(homeButton, sideBarMenuConstraints);
-        sideBarMenuConstraints.gridy = 1;
-        JTextField timeFrameText = new JTextField("Time Frame");
-        timeFrameText.setPreferredSize(new Dimension((int)sideBarMenuWidth, 25));
-        timeFrameText.setEditable(false);
-        sideBarMenu.add(timeFrameText, sideBarMenuConstraints);
-        sideBarMenuConstraints.gridy = 2;
-        sideBarMenu.add(timeFrameList, sideBarMenuConstraints);
+        setupSideBar();
 
         //Sidebar menu setup
         homeButton.addActionListener(new ActionListener() {
@@ -167,14 +108,17 @@ public class Healthee {
             }
         });
 
-        //Setting up default settings for different views
-        //Main view
+        //Setup Main view
         leftPagePanel.add(sideBarMenu, BorderLayout.NORTH);
         mainPanel.add(leftPagePanel, BorderLayout.WEST);
         mainPanel.add(mainCenterPanel, BorderLayout.CENTER);
 
-        mainCenterPanel.add(illTodayButton);
         createEmployees();
+        setupIllToday();
+
+
+        mainCenterPanel.add(illTodayButton);
+        mainCenterPanel.add(employeeListScrollPane);
         mainCenterPanel.add(totalIllnessHustoryButton);
         mainCenterPanel.add(aggIllnessDaysButton);
 
@@ -196,6 +140,63 @@ public class Healthee {
                 }
             }
         });
+    }
+
+    private void setupIllToday() {
+
+    }
+
+    private void setupSideBar() {
+        GridBagConstraints sideBarMenuConstraints = new GridBagConstraints();
+        sideBarMenuConstraints.gridx = 0;
+        sideBarMenuConstraints.gridy = 0;
+        sideBarMenuConstraints.anchor = GridBagConstraints.FIRST_LINE_START;
+        sideBarMenu = new JPanel(new GridBagLayout());
+        sideBarMenu.add(homeButton, sideBarMenuConstraints);
+        sideBarMenuConstraints.gridy = 1;
+        JTextField timeFrameText = new JTextField("Time Frame");
+        timeFrameText.setPreferredSize(new Dimension((int)sideBarMenuWidth, 25));
+        timeFrameText.setEditable(false);
+        sideBarMenu.add(timeFrameText, sideBarMenuConstraints);
+        sideBarMenuConstraints.gridy = 2;
+        sideBarMenu.add(timeFrameList, sideBarMenuConstraints);
+    }
+
+    private void setupButtons() {
+        specificEmployeeButton = new JButton("Specific Employee");
+        specificEmployeeButton.setBackground(Color.white);
+        illTodayButton = new JButton("Ill Today");
+        illTodayButton.setBackground(Color.white);
+        totalIllnessHustoryButton = new JButton("Total Illness History");
+        totalIllnessHustoryButton.setBackground(Color.white);
+        aggIllnessDaysButton = new JButton("Agg. Illness Days");
+        aggIllnessDaysButton.setBackground(Color.white);
+
+        Dimension sideBarMenuButtonDim = new Dimension((int)sideBarMenuWidth,(int)sideBarMenuWidth);
+        homeButton = new JButton("Home");
+        homeButton.setBackground(Color.white);
+        homeButton.setPreferredSize(sideBarMenuButtonDim);
+
+        returnButton = new JButton("Return to \n"+lastView);
+        returnButton.setBackground(Color.white);
+        returnButton.setPreferredSize(sideBarMenuButtonDim);
+    }
+
+    private void setupTimeFrameList() {
+        timeFrameListModel = new DefaultListModel<>();
+        timeFrameListModel.addElement("Past Week");
+        timeFrameListModel.addElement("Past 2 Weeks");
+        timeFrameListModel.addElement("Past Month");
+        timeFrameListModel.addElement("Past 3 Months");
+        timeFrameListModel.addElement("Past 6 Months");
+        timeFrameListModel.addElement("Past Year");
+        timeFrameListModel.addElement("All Time");
+
+        timeFrameList = new JList<>(timeFrameListModel);
+        timeFrameList.setSelectedIndex(0); //Sets the selected option to the first one in the time frame list
+        timeFrameList.setFixedCellWidth((int)sideBarMenuWidth);
+        timeFrameList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        timeFrameList.setLayoutOrientation(JList.VERTICAL);
     }
 
     public static void main(String args[]) {
@@ -275,6 +276,8 @@ public class Healthee {
         };
         String[] columnNames = {"Name", "Position"};
         employeeList = new JTable(employeeData, columnNames);
+        employeeList.setFont(new Font("P", Font.PLAIN, 20));
+        employeeList.setRowHeight(25);
         employeeList.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -288,8 +291,7 @@ public class Healthee {
         });
         employeeList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         employeeListScrollPane = new JScrollPane(employeeList);
-        employeeListScrollPane.setPreferredSize(new Dimension(mainCenterPanel.getWidth(),mainCenterPanel.getHeight()));
-        mainCenterPanel.add(employeeListScrollPane);
+
     }
 
     private void setToHomeButton() {
