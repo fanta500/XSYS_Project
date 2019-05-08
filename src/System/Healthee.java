@@ -25,6 +25,7 @@ public class Healthee {
     private double sideBarMenuWidth = dim.getWidth()/20;
     private String lastView = "";
     private ArrayList<Employee> employees;
+    private boolean specificEmployeeHasBeenOpened = false;
 
     //MODULES
     private Settings settings;
@@ -189,7 +190,7 @@ public class Healthee {
         } catch (IOException e) {
             System.out.println("Image could not be found");
         }
-        //homeButton.setBackground(Color.white);
+        homeButton.setBackground(Color.white);
         homeButton.setPreferredSize(sideBarMenuButtonDim);
 
         returnButton = new JButton("Return to \n"+lastView);
@@ -212,6 +213,19 @@ public class Healthee {
         timeFrameList.setFixedCellWidth((int)sideBarMenuWidth);
         timeFrameList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         timeFrameList.setLayoutOrientation(JList.VERTICAL);
+
+        timeFrameList.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                JList<DefaultListModel> target = (JList<DefaultListModel>) e.getSource();
+                int index = target.getSelectedIndex();
+                if (specificEmployeeHasBeenOpened) updateTimeFrameDependentObjects(index);
+            }
+        });
+    }
+
+    public void updateTimeFrameDependentObjects(int index) {
+        specificEmployee.setIllnessInTimeFrameText(index);
     }
 
     public static void main(String args[]) {
@@ -240,15 +254,17 @@ public class Healthee {
         mainPanel.setVisible(true);
     }
 
-    public void openSpecificEmployee(String name, String position, int age, ArrayList<Integer> sickDays) {
+    public void openSpecificEmployee(String name, String position, int age, ArrayList<Integer> sickDays, int timeFrameIndex, String hiringDate) {
         mainPanel.setVisible(false);
-        specificEmployee.setEmployeeDetails(name, position, age, sickDays); //modifies the specificEmployee object to display the correct information
+        specificEmployee.setEmployeeDetails(name, position, age, sickDays, timeFrameIndex, hiringDate); //modifies the specificEmployee object to display the correct information
+        specificEmployee.drawGraph();
         specificEmployeePanel.add(leftPagePanel,BorderLayout.WEST);
         specificEmployeePanel.add(specificEmployee.getJPanel(),BorderLayout.CENTER); //adds the panel that the specificEmployee class returns to the center of the panel
         lastView = "Employee";
         returnButton.setText("<html><center>"+"Return to"+"<br>"+lastView+"</center></html>");
         setToHomeButton();
         window.setContentPane(specificEmployeePanel);
+        specificEmployeeHasBeenOpened = true;
         specificEmployeePanel.setVisible(true);
     }
 
@@ -301,7 +317,9 @@ public class Healthee {
                 openSpecificEmployee(employees.get(row).getName(),
                                      employees.get(row).getPosition(),
                                      employees.get(row).getAge(),
-                                     employees.get(row).getSickDays());
+                                     employees.get(row).getSickDays(),
+                                     timeFrameList.getSelectedIndex(),
+                                     employees.get(row).getHiringDate());
             }
         });
         employeeList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
