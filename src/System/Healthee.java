@@ -182,7 +182,7 @@ public class Healthee {
         Dimension sideBarMenuButtonDim = new Dimension((int)sideBarMenuWidth,(int)sideBarMenuWidth);
         homeButton = new JButton();
         try {
-            BufferedImage image = ImageIO.read(new File("D:/coding_stuff/XSYS_Project/src/resources/home_button_small.png"));
+            BufferedImage image = ImageIO.read(new File("src/resources/home_button_small.png"));
             homeButton.setIcon(new ImageIcon(image));
             homeButton.setOpaque(false);
             homeButton.setContentAreaFilled(false);
@@ -219,13 +219,16 @@ public class Healthee {
             public void mouseClicked(MouseEvent e) {
                 JList<DefaultListModel> target = (JList<DefaultListModel>) e.getSource();
                 int index = target.getSelectedIndex();
-                if (specificEmployeeHasBeenOpened) updateTimeFrameDependentObjects(index);
+                if (specificEmployeeHasBeenOpened) {
+                    updateTimeFrameDependentObjects(index);
+                }
             }
         });
     }
 
     public void updateTimeFrameDependentObjects(int index) {
         specificEmployee.setIllnessInTimeFrameText(index);
+        specificEmployee.drawGraph(index);
     }
 
     public static void main(String args[]) {
@@ -257,7 +260,7 @@ public class Healthee {
     public void openSpecificEmployee(String name, String position, int age, ArrayList<Integer> sickDays, int timeFrameIndex, String hiringDate) {
         mainPanel.setVisible(false);
         specificEmployee.setEmployeeDetails(name, position, age, sickDays, timeFrameIndex, hiringDate); //modifies the specificEmployee object to display the correct information
-        specificEmployee.drawGraph();
+        specificEmployee.drawGraph(employeeList.getSelectedRow());
         specificEmployeePanel.add(leftPagePanel,BorderLayout.WEST);
         specificEmployeePanel.add(specificEmployee.getJPanel(),BorderLayout.CENTER); //adds the panel that the specificEmployee class returns to the center of the panel
         lastView = "Employee";

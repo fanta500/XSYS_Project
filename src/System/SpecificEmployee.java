@@ -1,5 +1,7 @@
 package System;
 
+import org.w3c.dom.css.Rect;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -85,9 +87,9 @@ public class SpecificEmployee {
         //THIS IS FOR THE TOP OF THE SCREEN (IMAGE; NAME; AGE; POSITION)
         GridBagConstraints gridBagConstraints = new GridBagConstraints(); //making GridBagLayoutConstraints to set position of elements within
         gridBagConstraints.insets = new Insets(15,15,0,0);
-        gridBagConstraints.anchor = GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.anchor = GridBagConstraints.PAGE_START;
         try {
-            BufferedImage image = ImageIO.read(new File("D:/coding_stuff/XSYS_Project/src/resources/profile_picture_small.png"));
+            BufferedImage image = ImageIO.read(new File("src/resources/profile_picture_small.png"));
             JLabel label = new JLabel(new ImageIcon(image));
             employeeDetailsPanelNested.add(label, gridBagConstraints);
         } catch (IOException e) {
@@ -96,10 +98,11 @@ public class SpecificEmployee {
         gridBagConstraints.gridx = 1;
         gridBagConstraints.anchor = GridBagConstraints.LINE_START;
         employeeDetailsPanelNested.add(employeeNameText, gridBagConstraints);
-        gridBagConstraints.anchor = GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.anchor = GridBagConstraints.PAGE_START;
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         employeeDetailsPanelNested.add(employeeAgeText, gridBagConstraints);
+        gridBagConstraints.anchor = GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
         employeeDetailsPanelNested.add(employeePositionText, gridBagConstraints);
@@ -122,6 +125,7 @@ public class SpecificEmployee {
         specificEmployeeCenterNorthWestPanel = new JPanel(new GridBagLayout()); //Panel to hold 3 rows and 2 columns, top left of center
         employeeDetailsPanel = new JPanel(new BorderLayout()); //Panel for employee details (Will contain another panel for layout)
         employeeDetailsPanelNested = new JPanel(new GridBagLayout()); //Final panel for employee details
+        specificEmployeeCenterPanel.add(lowerGraph, BorderLayout.WEST);
     }
 
     public void setEmployeeDetails(String name, String position, int age, ArrayList<Integer> sickDays, int timeFrameIndex, String hiringDate) {
@@ -142,18 +146,31 @@ public class SpecificEmployee {
         illnessInTimeFrameText.setText("Illness in time frame: "+sickDays.get(index)+" days");
     }
 
-    /*
-    private MyRectangle testForGraph = new MyRectangle(0,0, 500,25,Color.cyan);
-    private MyRectangle anotherGraph = new MyRectangle(500,0, 25, 300,Color.BLACK);
-    private Rectangle testTest = new Rectangle(500,0,25,300);
+    private JLabel lowerGraph = new JLabel();
 
-    public void drawGraph() {
-        specificEmployeeCenterPanel.add(testForGraph, BorderLayout.CENTER);
-        specificEmployeeCenterPanel.add(testTest, BorderLayout.CENTER);
-
+    public void drawGraph(int index) {
+        try {
+            BufferedImage image = null;
+            if (index==0) {
+                image = ImageIO.read(new File("src/resources/specific_employee_week_1.png"));
+            } else if (index==1) {
+                image = ImageIO.read(new File("src/resources/specific_employee_week_2.png"));
+            } else if (index==2) {
+                image = ImageIO.read(new File("src/resources/specific_employee_week_3.png"));
+            } else if (index==3) {
+                image = ImageIO.read(new File("src/resources/specific_employee_week_4.png"));
+            } else if (index==4) {
+                image = ImageIO.read(new File("src/resources/specific_employee_2weeks_1.png"));
+            } else if (index==5) {
+                image = ImageIO.read(new File("src/resources/specific_employee_2weeks_2.png"));
+            } else if (index==6) {
+                image = ImageIO.read(new File("src/resources/specific_employee_2weeks_3.png"));
+            }
+            lowerGraph.setIcon(new ImageIcon(image));
+        } catch (IOException e) {
+            System.out.println("Image could not be found");
+        }
     }
-    */
-
 
     public JPanel getJPanel() {
         return specificEmployeePanel;
