@@ -59,6 +59,15 @@ public class SpecificEmployee {
         employeeHiringDateText = new JTextArea(); //Text for employee hiring date
         illnessInPastYearText = new JTextArea(); //Text for employee illness in past year
         illnessInTimeFrameText = new JTextArea(); //Text for employee illness in time frame setting
+        employeeHiringDateText.setFont(new Font("P", Font.PLAIN, 20)); //Setting font size
+        illnessInPastYearText.setFont(new Font("P", Font.PLAIN, 20)); //Setting font size
+        illnessInTimeFrameText.setFont(new Font("P", Font.PLAIN, 20)); //Setting font size
+        employeeHiringDateText.setEditable(false); //Making details non-editable
+        illnessInPastYearText.setEditable(false); //Making details non-editable
+        illnessInTimeFrameText.setEditable(false); //Making details non-editable
+        employeeHiringDateText.setOpaque(false); //Remove the white backdrop
+        illnessInPastYearText.setOpaque(false); //Remove the white backdrop
+        illnessInTimeFrameText.setOpaque(false); //Remove the white backdrop
     }
 
     private void addComponents() {
@@ -125,21 +134,26 @@ public class SpecificEmployee {
         employeeAgeText.setText(age + " years old");
 
         employeeHiringDateText.setText("Hiring date: "+hiringDate);
-        illnessInTimeFrameText.setText("Illness in time frame: "+sickDays.get(timeFrameIndex));
-        illnessInPastYearText.setText("Illness in past year: "+sickDays.get(5));
+        illnessInTimeFrameText.setText("Illness in time frame: "+sickDays.get(timeFrameIndex)+" days");
+        illnessInPastYearText.setText("Illness in past year: "+sickDays.get(5)+" days");
     }
 
     public void setIllnessInTimeFrameText(int index) {
-        illnessInTimeFrameText.setText("Illness in time frame: "+sickDays.get(index));
+        illnessInTimeFrameText.setText("Illness in time frame: "+sickDays.get(index)+" days");
     }
 
+    /*
     private MyRectangle testForGraph = new MyRectangle(0,0, 500,25,Color.cyan);
-    private MyRectangle anotherGraph = new MyRectangle(0,0, 25, 300,Color.BLACK);
+    private MyRectangle anotherGraph = new MyRectangle(500,0, 25, 300,Color.BLACK);
+    private Rectangle testTest = new Rectangle(500,0,25,300);
 
     public void drawGraph() {
-        //specificEmployeePanel.add(testForGraph, BorderLayout.CENTER);
-        //specificEmployeePanel.add(anotherGraph, BorderLayout.SOUTH);
+        specificEmployeeCenterPanel.add(testForGraph, BorderLayout.CENTER);
+        specificEmployeeCenterPanel.add(testTest, BorderLayout.CENTER);
+
     }
+    */
+
 
     public JPanel getJPanel() {
         return specificEmployeePanel;
