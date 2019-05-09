@@ -167,6 +167,7 @@ public class SpecificEmployee {
                 image = ImageIO.read(new File("src/resources/specific_employee_2weeks_3.png"));
             }
             lowerGraph.setIcon(new ImageIcon(image));
+
         } catch (IOException e) {
             System.out.println("Image could not be found");
         }

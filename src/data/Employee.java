@@ -76,9 +76,7 @@ public class Employee {
         return position;
     }
 
-    public ArrayList<Integer> getSickDays() {
-        return sickDays;
-    }
+    public ArrayList<Integer> getSickDays() { return sickDays; }
 
     public String getHiringDate() { return hiringDate; }
 }

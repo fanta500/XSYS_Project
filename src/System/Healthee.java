@@ -210,6 +210,7 @@ public class Healthee {
 
         timeFrameList = new JList<>(timeFrameListModel);
         timeFrameList.setSelectedIndex(0); //Sets the selected option to the first one in the time frame list
+        System.out.println("Selected index: "+timeFrameList.getSelectedIndex());
         timeFrameList.setFixedCellWidth((int)sideBarMenuWidth);
         timeFrameList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         timeFrameList.setLayoutOrientation(JList.VERTICAL);
