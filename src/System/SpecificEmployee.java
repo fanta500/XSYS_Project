@@ -1,20 +1,15 @@
 package System;
 
-import org.w3c.dom.css.Rect;
-
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 
 public class SpecificEmployee {
-    private String name;
-    private String position;
-    private int age;
     private ArrayList<Integer> sickDays;
 
     //GUI
@@ -34,6 +29,11 @@ public class SpecificEmployee {
     private JTextArea illnessInPastYearText;
     private JTextArea illnessInTimeFrameText;
 
+    private JLabel lowerGraph;
+
+    private JTable illnessNotesTable;
+    private JScrollPane illnessNotesScrollPane;
+
     public SpecificEmployee() {
         setupGUI();
     }
@@ -41,6 +41,7 @@ public class SpecificEmployee {
     private void setupGUI() {
         initPanels();
         setupEmployeeText();
+        setupIllnessNotes();
         addComponents();
     }
 
@@ -81,6 +82,10 @@ public class SpecificEmployee {
         specificEmployeeCenterNorthPanel.add(specificEmployeeCenterNorthWestPanel, BorderLayout.WEST);
         specificEmployeeCenterPanel.add(specificEmployeeCenterNorthPanel, BorderLayout.NORTH);
         specificEmployeePanel.add(specificEmployeeCenterPanel, BorderLayout.CENTER);
+
+        specificEmployeeCenterPanel.add(lowerGraph, BorderLayout.WEST);
+
+        specificEmployeePanel.add(illnessNotesScrollPane, BorderLayout.EAST);
     }
 
     private void setupEmployeeTextAreas() {
@@ -108,6 +113,7 @@ public class SpecificEmployee {
         employeeDetailsPanelNested.add(employeePositionText, gridBagConstraints);
 
         //THIS IF FOR THE 3 ROW 2 COLUMN TEXT AREA RIGHT BELOW
+        gridBagConstraints.insets = new Insets(15,15,15,0);
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = GridBagConstraints.LINE_START;
@@ -125,13 +131,13 @@ public class SpecificEmployee {
         specificEmployeeCenterNorthWestPanel = new JPanel(new GridBagLayout()); //Panel to hold 3 rows and 2 columns, top left of center
         employeeDetailsPanel = new JPanel(new BorderLayout()); //Panel for employee details (Will contain another panel for layout)
         employeeDetailsPanelNested = new JPanel(new GridBagLayout()); //Final panel for employee details
-        specificEmployeeCenterPanel.add(lowerGraph, BorderLayout.WEST);
+        lowerGraph = new JLabel();
+        illnessNotesTable = new JTable();
+        illnessNotesScrollPane = new JScrollPane(illnessNotesTable);
+
     }
 
     public void setEmployeeDetails(String name, String position, int age, ArrayList<Integer> sickDays, int timeFrameIndex, String hiringDate) {
-        this.name = name;
-        this.position = position;
-        this.age = age;
         this.sickDays = sickDays;
         employeeNameText.setText(name);
         employeePositionText.setText(position);
@@ -145,8 +151,6 @@ public class SpecificEmployee {
     public void setIllnessInTimeFrameText(int index) {
         illnessInTimeFrameText.setText("Illness in time frame: "+sickDays.get(index)+" days");
     }
-
-    private JLabel lowerGraph = new JLabel();
 
     public void drawGraph(int index) {
         try {
@@ -173,9 +177,38 @@ public class SpecificEmployee {
         }
     }
 
+
+    public void setupIllnessNotes() {
+        String[][] illnessData = {
+                {"16/02/2019", "<html>" + "Almost feeling well enough. Coming in tomorrow."},
+                {"01/03/2019", "<html>" + "Feeling ill."},
+                {"11/03/2019", "<html>" + "Caught a cold, but I'm coming in tomorrow."},
+                {"18/03/2019", "<html>" + "Feeling ill."},
+                {"22/03/2019", "<html>" + "I have an appointment with my doctor."},
+                {"25/04/2019", "<html>" + "Not feeling well."},
+                {"04/05/2019", "<html>" + "Visiting my mother who is ill. My father is on a business trip, so I have to take care of her today"},
+        };
+
+        String[] columnNames = {"Date", "Note"};
+        illnessNotesTable = new JTable(illnessData, columnNames);
+        illnessNotesTable.getColumnModel().getColumn(0).setPreferredWidth(0);
+        illnessNotesTable.setRowSelectionAllowed(false);
+        illnessNotesTable.setColumnSelectionAllowed(false);
+
+        //TO SET TEXT TO TOP OF CELL
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setVerticalAlignment( JLabel.TOP );
+        illnessNotesTable.getColumnModel().getColumn(1).setCellRenderer( centerRenderer );
+        //SET FONT
+        illnessNotesTable.setFont(new Font("P", Font.PLAIN, 20));
+        //SET ROW HEIGHT
+        illnessNotesTable.setRowHeight(110);
+
+        illnessNotesTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        illnessNotesScrollPane = new JScrollPane(illnessNotesTable);
+    }
+
     public JPanel getJPanel() {
         return specificEmployeePanel;
     }
-
-
 }

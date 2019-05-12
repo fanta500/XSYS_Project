@@ -210,7 +210,7 @@ public class Healthee {
 
         timeFrameList = new JList<>(timeFrameListModel);
         timeFrameList.setSelectedIndex(0); //Sets the selected option to the first one in the time frame list
-        System.out.println("Selected index: "+timeFrameList.getSelectedIndex());
+        //System.out.println("Selected index: "+timeFrameList.getSelectedIndex());
         timeFrameList.setFixedCellWidth((int)sideBarMenuWidth);
         timeFrameList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         timeFrameList.setLayoutOrientation(JList.VERTICAL);
@@ -261,7 +261,8 @@ public class Healthee {
     public void openSpecificEmployee(String name, String position, int age, ArrayList<Integer> sickDays, int timeFrameIndex, String hiringDate) {
         mainPanel.setVisible(false);
         specificEmployee.setEmployeeDetails(name, position, age, sickDays, timeFrameIndex, hiringDate); //modifies the specificEmployee object to display the correct information
-        specificEmployee.drawGraph(employeeList.getSelectedRow());
+        specificEmployee.drawGraph(timeFrameList.getSelectedIndex());
+        //System.out.println("Drawing graph for index: "+timeFrameList.getSelectedIndex());
         specificEmployeePanel.add(leftPagePanel,BorderLayout.WEST);
         specificEmployeePanel.add(specificEmployee.getJPanel(),BorderLayout.CENTER); //adds the panel that the specificEmployee class returns to the center of the panel
         lastView = "Employee";
