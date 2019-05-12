@@ -30,6 +30,7 @@ public class SpecificEmployee {
     private JTextArea illnessInTimeFrameText;
 
     private JLabel lowerGraph;
+    private JLabel upperGraph;
 
     private JTable illnessNotesTable;
     private JScrollPane illnessNotesScrollPane;
@@ -83,9 +84,18 @@ public class SpecificEmployee {
         specificEmployeeCenterPanel.add(specificEmployeeCenterNorthPanel, BorderLayout.NORTH);
         specificEmployeePanel.add(specificEmployeeCenterPanel, BorderLayout.CENTER);
 
-        specificEmployeeCenterPanel.add(lowerGraph, BorderLayout.WEST);
-
+        //ADDING PANEL TO CENTER PANEL WEST FOR LOWER GRAPH
+        JPanel specificEmployeeCenterWestPanel = new JPanel(new GridBagLayout());
+        specificEmployeeCenterPanel.add(specificEmployeeCenterWestPanel, BorderLayout.WEST);
+        GridBagConstraints gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.insets = new Insets(0,15,0,0);
+        specificEmployeeCenterWestPanel.add(lowerGraph, gridBagConstraints);
         specificEmployeePanel.add(illnessNotesScrollPane, BorderLayout.EAST);
+
+        //ADDING upperGraph TO specificEmployeeCenterNorthWestPanel
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.anchor = GridBagConstraints.FIRST_LINE_START;
+        specificEmployeeCenterNorthWestPanel.add(upperGraph, gridBagConstraints);
     }
 
     private void setupEmployeeTextAreas() {
@@ -113,15 +123,18 @@ public class SpecificEmployee {
         employeeDetailsPanelNested.add(employeePositionText, gridBagConstraints);
 
         //THIS IF FOR THE 3 ROW 2 COLUMN TEXT AREA RIGHT BELOW
-        gridBagConstraints.insets = new Insets(15,15,15,0);
+        gridBagConstraints.insets = new Insets(15,15,0,15);
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.anchor = GridBagConstraints.LINE_START;
+        gridBagConstraints.anchor = GridBagConstraints.FIRST_LINE_START;
         specificEmployeeCenterNorthWestPanel.add(employeeHiringDateText, gridBagConstraints);
-        gridBagConstraints.gridy = 1;
+        //gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new Insets(75,15,10,15);
         specificEmployeeCenterNorthWestPanel.add(illnessInPastYearText, gridBagConstraints);
-        gridBagConstraints.gridy = 2;
+        //gridBagConstraints.gridy = 2;
+        gridBagConstraints.insets = new Insets(135,15,10,15);
         specificEmployeeCenterNorthWestPanel.add(illnessInTimeFrameText, gridBagConstraints);
+
     }
 
     private void initPanels() {
@@ -132,9 +145,9 @@ public class SpecificEmployee {
         employeeDetailsPanel = new JPanel(new BorderLayout()); //Panel for employee details (Will contain another panel for layout)
         employeeDetailsPanelNested = new JPanel(new GridBagLayout()); //Final panel for employee details
         lowerGraph = new JLabel();
+        upperGraph = new JLabel();
         illnessNotesTable = new JTable();
         illnessNotesScrollPane = new JScrollPane(illnessNotesTable);
-
     }
 
     public void setEmployeeDetails(String name, String position, int age, ArrayList<Integer> sickDays, int timeFrameIndex, String hiringDate) {
@@ -143,9 +156,9 @@ public class SpecificEmployee {
         employeePositionText.setText(position);
         employeeAgeText.setText(age + " years old");
 
-        employeeHiringDateText.setText("Hiring date: "+hiringDate);
+        employeeHiringDateText.setText("Hiring date:          "+hiringDate);
         illnessInTimeFrameText.setText("Illness in time frame: "+sickDays.get(timeFrameIndex)+" days");
-        illnessInPastYearText.setText("Illness in past year: "+sickDays.get(5)+" days");
+        illnessInPastYearText.setText("Illness in past year:   "+sickDays.get(5)+" days");
     }
 
     public void setIllnessInTimeFrameText(int index) {
@@ -154,31 +167,39 @@ public class SpecificEmployee {
 
     public void drawGraph(int index) {
         try {
-            BufferedImage image = null;
+            BufferedImage imageLower = null;
+            BufferedImage imageUpper = null;
             if (index==0) {
-                image = ImageIO.read(new File("src/resources/specific_employee_week_1.png"));
+                imageLower = ImageIO.read(new File("src/resources/specific_employee_week_1.png"));
+                imageUpper = ImageIO.read(new File("src/resources/specific_employee_pattern_week.png"));
             } else if (index==1) {
-                image = ImageIO.read(new File("src/resources/specific_employee_week_2.png"));
+                imageLower = ImageIO.read(new File("src/resources/specific_employee_2weeks_1.png"));
+                imageUpper = ImageIO.read(new File("src/resources/specific_employee_pattern_2weeks.png"));
             } else if (index==2) {
-                image = ImageIO.read(new File("src/resources/specific_employee_week_3.png"));
+                imageLower = ImageIO.read(new File("src/resources/specific_employee_month.png"));
+                imageUpper = ImageIO.read(new File("src/resources/specific_employee_pattern_month.png"));
             } else if (index==3) {
-                image = ImageIO.read(new File("src/resources/specific_employee_week_4.png"));
+                imageLower = ImageIO.read(new File("src/resources/specific_employee_3months.png"));
+                imageUpper = ImageIO.read(new File("src/resources/specific_employee_pattern_3months.png"));
             } else if (index==4) {
-                image = ImageIO.read(new File("src/resources/specific_employee_2weeks_1.png"));
+                imageLower = ImageIO.read(new File("src/resources/specific_employee_6months.png"));
+                imageUpper = ImageIO.read(new File("src/resources/specific_employee_pattern_6months.png"));
             } else if (index==5) {
-                image = ImageIO.read(new File("src/resources/specific_employee_2weeks_2.png"));
+                imageLower = ImageIO.read(new File("src/resources/specific_employee_year.png"));
+                imageUpper = ImageIO.read(new File("src/resources/specific_employee_pattern_year.png"));
             } else if (index==6) {
-                image = ImageIO.read(new File("src/resources/specific_employee_2weeks_3.png"));
+                imageLower = ImageIO.read(new File("src/resources/specific_employee_allTime.png"));
+                imageUpper = ImageIO.read(new File("src/resources/specific_employee_pattern_allTime.png"));
             }
-            lowerGraph.setIcon(new ImageIcon(image));
+            lowerGraph.setIcon(new ImageIcon(imageLower));
+            upperGraph.setIcon(new ImageIcon(imageUpper));
 
         } catch (IOException e) {
             System.out.println("Image could not be found");
         }
     }
 
-
-    public void setupIllnessNotes() {
+    private void setupIllnessNotes() {
         String[][] illnessData = {
                 {"16/02/2019", "<html>" + "Almost feeling well enough. Coming in tomorrow."},
                 {"01/03/2019", "<html>" + "Feeling ill."},

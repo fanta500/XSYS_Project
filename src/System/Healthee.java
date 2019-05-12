@@ -4,6 +4,7 @@ import Data.Employee;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,6 +14,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * @author Alexander Schacht
@@ -28,9 +30,7 @@ public class Healthee {
     private boolean specificEmployeeHasBeenOpened = false;
 
     //MODULES
-    private Settings settings;
     private SpecificEmployee specificEmployee;
-    private Timeframe timeframe;
     private TotalIllnessHistory totalIllnessHistory;
 
     //FRAME
@@ -48,7 +48,6 @@ public class Healthee {
     private JPanel leftPagePanel;
 
     //GUI ELEMENTS
-    private JButton specificEmployeeButton;
     private JButton totalIllnessHustoryButton;
     private JButton illTodayButton;
     private JButton aggIllnessDaysButton;
@@ -63,6 +62,10 @@ public class Healthee {
     private JTable employeeList;
     private JScrollPane employeeListScrollPane;
 
+    //ILL TODAY
+    private JTable illTodayList;
+    private JScrollPane illTodayListScrollPane;
+
     private Employee emp1;
     private Employee emp2;
     private Employee emp3;
@@ -73,9 +76,7 @@ public class Healthee {
 
     private Healthee() {
         //INIT SYSTEMS
-        settings = new Settings();
         specificEmployee = new SpecificEmployee();
-        timeframe = new Timeframe();
         totalIllnessHistory = new TotalIllnessHistory();
 
         //INIT GUI ELEMENTS
@@ -117,12 +118,30 @@ public class Healthee {
         mainPanel.add(leftPagePanel, BorderLayout.WEST);
         mainPanel.add(mainCenterPanel, BorderLayout.CENTER);
 
-        createEmployees();
-        setupIllToday();
+        createEmployees(); //Generates employees and also generates random ill people today
 
+        //Sets up the text for ill today
+        JPanel mainCenterPanelTopLeft = new JPanel(new BorderLayout());
+        JTextArea illTodayTextArea = new JTextArea("Ill today");
+        illTodayTextArea.setFont(new Font("P", Font.PLAIN, 24)); //Setting font size
+        illTodayTextArea.setEditable(false); //Making details non-editable
+        illTodayTextArea.setOpaque(false); //Remove the white backdrop
 
-        mainCenterPanel.add(illTodayButton);
-        mainCenterPanel.add(employeeListScrollPane);
+        mainCenterPanelTopLeft.add(illTodayTextArea, BorderLayout.NORTH);
+        mainCenterPanelTopLeft.add(illTodayListScrollPane, BorderLayout.CENTER);
+
+        //Sets up the text for employees
+        JPanel mainCenterTopRight = new JPanel(new BorderLayout());
+        JTextArea employeesTextArea = new JTextArea("Employees");
+        employeesTextArea.setFont(new Font("P", Font.PLAIN, 24)); //Setting font size
+        employeesTextArea.setEditable(false); //Making details non-editable
+        employeesTextArea.setOpaque(false); //Remove the white backdrop
+
+        mainCenterTopRight.add(employeesTextArea, BorderLayout.NORTH);
+        mainCenterTopRight.add(employeeListScrollPane, BorderLayout.CENTER);
+
+        mainCenterPanel.add(mainCenterPanelTopLeft);
+        mainCenterPanel.add(mainCenterTopRight);
         mainCenterPanel.add(totalIllnessHustoryButton);
         mainCenterPanel.add(aggIllnessDaysButton);
 
@@ -149,10 +168,6 @@ public class Healthee {
         });
     }
 
-    private void setupIllToday() {
-
-    }
-
     private void setupSideBar() {
         GridBagConstraints sideBarMenuConstraints = new GridBagConstraints();
         sideBarMenuConstraints.gridx = 0;
@@ -170,8 +185,6 @@ public class Healthee {
     }
 
     private void setupButtons() {
-        specificEmployeeButton = new JButton("Specific Employee");
-        specificEmployeeButton.setBackground(Color.white);
         illTodayButton = new JButton("Ill Today");
         illTodayButton.setBackground(Color.white);
         totalIllnessHustoryButton = new JButton("Total Illness History");
@@ -210,7 +223,6 @@ public class Healthee {
 
         timeFrameList = new JList<>(timeFrameListModel);
         timeFrameList.setSelectedIndex(0); //Sets the selected option to the first one in the time frame list
-        //System.out.println("Selected index: "+timeFrameList.getSelectedIndex());
         timeFrameList.setFixedCellWidth((int)sideBarMenuWidth);
         timeFrameList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         timeFrameList.setLayoutOrientation(JList.VERTICAL);
@@ -262,7 +274,6 @@ public class Healthee {
         mainPanel.setVisible(false);
         specificEmployee.setEmployeeDetails(name, position, age, sickDays, timeFrameIndex, hiringDate); //modifies the specificEmployee object to display the correct information
         specificEmployee.drawGraph(timeFrameList.getSelectedIndex());
-        //System.out.println("Drawing graph for index: "+timeFrameList.getSelectedIndex());
         specificEmployeePanel.add(leftPagePanel,BorderLayout.WEST);
         specificEmployeePanel.add(specificEmployee.getJPanel(),BorderLayout.CENTER); //adds the panel that the specificEmployee class returns to the center of the panel
         lastView = "Employee";
@@ -301,6 +312,8 @@ public class Healthee {
         employees.add(emp6);
         employees.add(emp7);
 
+        generateIllToday();
+
         String[][] employeeData = {
                 {emp1.getName(), emp1.getPosition()},
                 {emp2.getName(), emp2.getPosition()},
@@ -329,6 +342,48 @@ public class Healthee {
         });
         employeeList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         employeeListScrollPane = new JScrollPane(employeeList);
+    }
+
+    private void generateIllToday() {
+        Random illPersonIndex = new Random();
+        int illPerson1Index = illPersonIndex.nextInt(6);
+        int illPerson2Index = illPersonIndex.nextInt(6);
+        while (illPerson1Index == illPerson2Index) {
+            illPerson2Index = illPersonIndex.nextInt(6);
+        }
+        Employee illPerson1 = employees.get(illPerson1Index);
+        Employee illPerson2 = employees.get(illPerson2Index);
+
+        String[][] employeeData = {
+                {illPerson1.getName(), "<html>" + "I have an appointment with my doctor."},
+                {illPerson2.getName(), "<html>" + "Caught a cold, but I'm coming in tomorrow."},
+        };
+
+        String[] columnNames = {"Name", "Note"};
+        illTodayList = new JTable(employeeData, columnNames);
+
+        //TO SET TEXT TO TOP OF CELL
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setVerticalAlignment( JLabel.TOP );
+        illTodayList.getColumnModel().getColumn(1).setCellRenderer( centerRenderer );
+
+        illTodayList.setFont(new Font("P", Font.PLAIN, 20));
+        illTodayList.setRowHeight(110);
+        illTodayList.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                JTable target = (JTable) e.getSource();
+                int row = target.getSelectedRow();
+                openSpecificEmployee(employees.get(row).getName(),
+                        employees.get(row).getPosition(),
+                        employees.get(row).getAge(),
+                        employees.get(row).getSickDays(),
+                        timeFrameList.getSelectedIndex(),
+                        employees.get(row).getHiringDate());
+            }
+        });
+        illTodayList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        illTodayListScrollPane = new JScrollPane(illTodayList);
     }
 
     private void setToHomeButton() {
