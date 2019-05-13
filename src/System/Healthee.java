@@ -48,7 +48,8 @@ public class Healthee {
 
     //GUI ELEMENTS
     private JLabel totalIllnessHistoryGraph = new JLabel();
-    private JButton totalIllnessHustoryButton;
+    private JLabel aggIllnessDaysGraph = new JLabel();
+
     private JButton aggIllnessDaysButton;
 
     private JButton homeButton;
@@ -156,20 +157,13 @@ public class Healthee {
         sicknessOnWeekdayTextArea.setOpaque(false); //Remove the white backdrop
 
         mainCenterBottomRight.add(sicknessOnWeekdayTextArea, BorderLayout.NORTH);
-        mainCenterBottomRight.add(aggIllnessDaysButton, BorderLayout.CENTER);
+        mainCenterBottomRight.add(aggIllnessDaysGraph, BorderLayout.CENTER);
 
         mainCenterPanel.add(mainCenterPanelTopLeft);
         mainCenterPanel.add(mainCenterTopRight);
         mainCenterPanel.add(mainCenterBottomLeft);
-        drawTotalIllnessHistoryGraph();
+        drawMainScreenGraphs();
         mainCenterPanel.add(mainCenterBottomRight);
-
-        totalIllnessHustoryButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                openTotalIllnessHistory();
-            }
-        });
 
         returnButton.addActionListener(new ActionListener() {
             @Override
@@ -205,8 +199,6 @@ public class Healthee {
     }
 
     private void setupButtons() {
-        totalIllnessHustoryButton = new JButton("Total Illness History");
-        totalIllnessHustoryButton.setBackground(Color.white);
         aggIllnessDaysButton = new JButton("Agg. Illness Days");
         aggIllnessDaysButton.setBackground(Color.white);
 
@@ -254,7 +246,7 @@ public class Healthee {
                     updateTimeFrameDependentObjects(index);
 
                 }
-                drawTotalIllnessHistoryGraph();
+                drawMainScreenGraphs();
             }
         });
     }
@@ -314,28 +306,35 @@ public class Healthee {
         totalIllnessHistoryPanel.setVisible(true);
     }
 
-    public void drawTotalIllnessHistoryGraph() {
+    public void drawMainScreenGraphs() {
         int index = timeFrameList.getSelectedIndex();
-        System.out.println(index);
         try {
-            BufferedImage graph = null;
+            BufferedImage totalIllnessGraph = null;
+            BufferedImage aggIllnessGraph = null;
             if (index==0) {
-                graph = ImageIO.read(new File("src/resources/total_illness_week.png"));
+                totalIllnessGraph = ImageIO.read(new File("src/resources/total_illness_week.png"));
+                aggIllnessGraph = ImageIO.read(new File("src/resources/agg_illness_week.png"));
             } else if (index==1) {
-                graph = ImageIO.read(new File("src/resources/total_illness_2weeks.png"));
+                totalIllnessGraph = ImageIO.read(new File("src/resources/total_illness_2weeks.png"));
+                aggIllnessGraph = ImageIO.read(new File("src/resources/agg_illness_2weeks.png"));
             } else if (index==2) {
-                graph = ImageIO.read(new File("src/resources/total_illness_month.png"));
+                totalIllnessGraph = ImageIO.read(new File("src/resources/total_illness_month.png"));
+                aggIllnessGraph = ImageIO.read(new File("src/resources/agg_illness_month.png"));
             } else if (index==3) {
-                graph = ImageIO.read(new File("src/resources/total_illness_3months.png"));
+                totalIllnessGraph = ImageIO.read(new File("src/resources/total_illness_3months.png"));
+                aggIllnessGraph = ImageIO.read(new File("src/resources/agg_illness_3months.png"));
             } else if (index==4) {
-                graph = ImageIO.read(new File("src/resources/total_illness_6months.png"));
+                totalIllnessGraph = ImageIO.read(new File("src/resources/total_illness_6months.png"));
+                aggIllnessGraph = ImageIO.read(new File("src/resources/agg_illness_6months.png"));
             } else if (index==5) {
-                graph = ImageIO.read(new File("src/resources/total_illness_year.png"));
+                totalIllnessGraph = ImageIO.read(new File("src/resources/total_illness_year.png"));
+                aggIllnessGraph = ImageIO.read(new File("src/resources/agg_illness_year.png"));
             } else if (index==6) {
-                graph = ImageIO.read(new File("src/resources/total_illness_allTime.png"));
+                totalIllnessGraph = ImageIO.read(new File("src/resources/total_illness_allTime.png"));
+                aggIllnessGraph = ImageIO.read(new File("src/resources/agg_illness_allTime.png"));
             }
-            totalIllnessHistoryGraph.setIcon(new ImageIcon(graph));
-
+            totalIllnessHistoryGraph.setIcon(new ImageIcon(totalIllnessGraph));
+            aggIllnessDaysGraph.setIcon(new ImageIcon(aggIllnessGraph));
         } catch (IOException e) {
             System.out.println("Image could not be found");
         }
