@@ -161,7 +161,7 @@ public class Healthee {
         mainCenterPanel.add(mainCenterPanelTopLeft);
         mainCenterPanel.add(mainCenterTopRight);
         mainCenterPanel.add(mainCenterBottomLeft);
-        drawGraph();
+        drawTotalIllnessHistoryGraph();
         mainCenterPanel.add(mainCenterBottomRight);
 
         totalIllnessHustoryButton.addActionListener(new ActionListener() {
@@ -254,7 +254,7 @@ public class Healthee {
                     updateTimeFrameDependentObjects(index);
 
                 }
-                drawGraph();
+                drawTotalIllnessHistoryGraph();
             }
         });
     }
@@ -314,7 +314,7 @@ public class Healthee {
         totalIllnessHistoryPanel.setVisible(true);
     }
 
-    public void drawGraph() {
+    public void drawTotalIllnessHistoryGraph() {
         int index = timeFrameList.getSelectedIndex();
         System.out.println(index);
         try {
@@ -332,7 +332,7 @@ public class Healthee {
             } else if (index==5) {
                 graph = ImageIO.read(new File("src/resources/total_illness_year.png"));
             } else if (index==6) {
-                graph = ImageIO.read(new File("src/resources/total_illness_year.png"));
+                graph = ImageIO.read(new File("src/resources/total_illness_allTime.png"));
             }
             totalIllnessHistoryGraph.setIcon(new ImageIcon(graph));
 
