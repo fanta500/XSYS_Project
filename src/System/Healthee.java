@@ -31,7 +31,6 @@ public class Healthee {
 
     //MODULES
     private SpecificEmployee specificEmployee;
-    private TotalIllnessHistory totalIllnessHistory;
 
     //FRAME
     private JFrame window;
@@ -48,8 +47,8 @@ public class Healthee {
     private JPanel leftPagePanel;
 
     //GUI ELEMENTS
+    private JLabel totalIllnessHistoryGraph = new JLabel();
     private JButton totalIllnessHustoryButton;
-    private JButton illTodayButton;
     private JButton aggIllnessDaysButton;
 
     private JButton homeButton;
@@ -77,7 +76,6 @@ public class Healthee {
     private Healthee() {
         //INIT SYSTEMS
         specificEmployee = new SpecificEmployee();
-        totalIllnessHistory = new TotalIllnessHistory();
 
         //INIT GUI ELEMENTS
         window = new JFrame("Healthee");
@@ -122,7 +120,7 @@ public class Healthee {
 
         //Sets up the text for ill today
         JPanel mainCenterPanelTopLeft = new JPanel(new BorderLayout());
-        JTextArea illTodayTextArea = new JTextArea("Ill today");
+        JTextArea illTodayTextArea = new JTextArea("Ill Today");
         illTodayTextArea.setFont(new Font("P", Font.PLAIN, 24)); //Setting font size
         illTodayTextArea.setEditable(false); //Making details non-editable
         illTodayTextArea.setOpaque(false); //Remove the white backdrop
@@ -140,10 +138,31 @@ public class Healthee {
         mainCenterTopRight.add(employeesTextArea, BorderLayout.NORTH);
         mainCenterTopRight.add(employeeListScrollPane, BorderLayout.CENTER);
 
+        //Sets up the text for total illness history
+        JPanel mainCenterBottomLeft = new JPanel(new BorderLayout());
+        JTextArea illnessHistoryTextArea = new JTextArea("Total Illness History");
+        illnessHistoryTextArea.setFont(new Font("P", Font.PLAIN, 24)); //Setting font size
+        illnessHistoryTextArea.setEditable(false); //Making details non-editable
+        illnessHistoryTextArea.setOpaque(false); //Remove the white backdrop
+
+        mainCenterBottomLeft.add(illnessHistoryTextArea, BorderLayout.NORTH);
+        mainCenterBottomLeft.add(totalIllnessHistoryGraph, BorderLayout.CENTER);
+
+        //Sets up the text for sickness on weekday
+        JPanel mainCenterBottomRight = new JPanel(new BorderLayout());
+        JTextArea sicknessOnWeekdayTextArea = new JTextArea("Sickness on Weekday");
+        sicknessOnWeekdayTextArea.setFont(new Font("P", Font.PLAIN, 24)); //Setting font size
+        sicknessOnWeekdayTextArea.setEditable(false); //Making details non-editable
+        sicknessOnWeekdayTextArea.setOpaque(false); //Remove the white backdrop
+
+        mainCenterBottomRight.add(sicknessOnWeekdayTextArea, BorderLayout.NORTH);
+        mainCenterBottomRight.add(aggIllnessDaysButton, BorderLayout.CENTER);
+
         mainCenterPanel.add(mainCenterPanelTopLeft);
         mainCenterPanel.add(mainCenterTopRight);
-        mainCenterPanel.add(totalIllnessHustoryButton);
-        mainCenterPanel.add(aggIllnessDaysButton);
+        mainCenterPanel.add(mainCenterBottomLeft);
+        drawGraph();
+        mainCenterPanel.add(mainCenterBottomRight);
 
         totalIllnessHustoryButton.addActionListener(new ActionListener() {
             @Override
@@ -151,6 +170,7 @@ public class Healthee {
                 openTotalIllnessHistory();
             }
         });
+
         returnButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -185,8 +205,6 @@ public class Healthee {
     }
 
     private void setupButtons() {
-        illTodayButton = new JButton("Ill Today");
-        illTodayButton.setBackground(Color.white);
         totalIllnessHustoryButton = new JButton("Total Illness History");
         totalIllnessHustoryButton.setBackground(Color.white);
         aggIllnessDaysButton = new JButton("Agg. Illness Days");
@@ -234,7 +252,9 @@ public class Healthee {
                 int index = target.getSelectedIndex();
                 if (specificEmployeeHasBeenOpened) {
                     updateTimeFrameDependentObjects(index);
+
                 }
+                drawGraph();
             }
         });
     }
@@ -292,6 +312,33 @@ public class Healthee {
         setToHomeButton();
         window.setContentPane(totalIllnessHistoryPanel);
         totalIllnessHistoryPanel.setVisible(true);
+    }
+
+    public void drawGraph() {
+        int index = timeFrameList.getSelectedIndex();
+        System.out.println(index);
+        try {
+            BufferedImage graph = null;
+            if (index==0) {
+                graph = ImageIO.read(new File("src/resources/total_illness_week.png"));
+            } else if (index==1) {
+                graph = ImageIO.read(new File("src/resources/total_illness_2weeks.png"));
+            } else if (index==2) {
+                graph = ImageIO.read(new File("src/resources/total_illness_month.png"));
+            } else if (index==3) {
+                graph = ImageIO.read(new File("src/resources/total_illness_3months.png"));
+            } else if (index==4) {
+                graph = ImageIO.read(new File("src/resources/total_illness_6months.png"));
+            } else if (index==5) {
+                graph = ImageIO.read(new File("src/resources/total_illness_year.png"));
+            } else if (index==6) {
+                graph = ImageIO.read(new File("src/resources/total_illness_year.png"));
+            }
+            totalIllnessHistoryGraph.setIcon(new ImageIcon(graph));
+
+        } catch (IOException e) {
+            System.out.println("Image could not be found");
+        }
     }
 
     private void createEmployees() {
@@ -369,17 +416,27 @@ public class Healthee {
 
         illTodayList.setFont(new Font("P", Font.PLAIN, 20));
         illTodayList.setRowHeight(110);
+        int finalIllPerson2Index = illPerson2Index; //Had to convert for some reason
         illTodayList.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 JTable target = (JTable) e.getSource();
                 int row = target.getSelectedRow();
-                openSpecificEmployee(employees.get(row).getName(),
-                        employees.get(row).getPosition(),
-                        employees.get(row).getAge(),
-                        employees.get(row).getSickDays(),
-                        timeFrameList.getSelectedIndex(),
-                        employees.get(row).getHiringDate());
+                if (row == 0) {
+                    openSpecificEmployee(employees.get(illPerson1Index).getName(),
+                            employees.get(illPerson1Index).getPosition(),
+                            employees.get(illPerson1Index).getAge(),
+                            employees.get(illPerson1Index).getSickDays(),
+                            timeFrameList.getSelectedIndex(),
+                            employees.get(illPerson1Index).getHiringDate());
+                } else {
+                    openSpecificEmployee(employees.get(finalIllPerson2Index).getName(),
+                            employees.get(finalIllPerson2Index).getPosition(),
+                            employees.get(finalIllPerson2Index).getAge(),
+                            employees.get(finalIllPerson2Index).getSickDays(),
+                            timeFrameList.getSelectedIndex(),
+                            employees.get(finalIllPerson2Index).getHiringDate());
+                }
             }
         });
         illTodayList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
