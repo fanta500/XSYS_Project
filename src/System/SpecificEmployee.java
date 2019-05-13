@@ -170,7 +170,8 @@ public class SpecificEmployee {
             BufferedImage imageLower = null;
             BufferedImage imageUpper = null;
             if (index==0) {
-                imageLower = ImageIO.read(new File("src/resources/specific_employee_week_1.png"));
+                //imageLower = ImageIO.read(new File("src/resources/specific_employee_week_1.png"));
+                imageLower = ImageIO.read(getClass().getResource("/specific_employee_week_1.png"));
                 imageUpper = ImageIO.read(new File("src/resources/specific_employee_pattern_week.png"));
             } else if (index==1) {
                 imageLower = ImageIO.read(new File("src/resources/specific_employee_2weeks_1.png"));
