@@ -50,8 +50,6 @@ public class Healthee {
     private JLabel totalIllnessHistoryGraph = new JLabel();
     private JLabel aggIllnessDaysGraph = new JLabel();
 
-    private JButton aggIllnessDaysButton;
-
     private JButton homeButton;
     private JButton returnButton;
 
@@ -109,6 +107,7 @@ public class Healthee {
             @Override
             public void actionPerformed(ActionEvent e) {
                 openMainScreen();
+                System.out.println("Home button pressed");
             }
         });
 
@@ -174,9 +173,11 @@ public class Healthee {
                     setToHomeButton();
                     window.setContentPane(specificEmployeePanel);
                     specificEmployeePanel.setVisible(true);
+                    System.out.println("Return to an employee button pressed");
                 } else if (lastView.equals("Illness History")) {
                     mainPanel.setVisible(false);
                     openTotalIllnessHistory();
+                    System.out.println("Return to total illness history button pressed");
                 }
             }
         });
@@ -199,9 +200,6 @@ public class Healthee {
     }
 
     private void setupButtons() {
-        aggIllnessDaysButton = new JButton("Agg. Illness Days");
-        aggIllnessDaysButton.setBackground(Color.white);
-
         Dimension sideBarMenuButtonDim = new Dimension((int)sideBarMenuWidth,(int)sideBarMenuWidth);
         homeButton = new JButton();
         try {
@@ -247,6 +245,7 @@ public class Healthee {
 
                 }
                 drawMainScreenGraphs();
+                System.out.println("Clicked time frame list at index: "+index);
             }
         });
     }
@@ -384,6 +383,7 @@ public class Healthee {
                                      employees.get(row).getSickDays(),
                                      timeFrameList.getSelectedIndex(),
                                      employees.get(row).getHiringDate());
+                System.out.println("Pressed employee list at index: "+row);
             }
         });
         employeeList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -436,6 +436,7 @@ public class Healthee {
                             timeFrameList.getSelectedIndex(),
                             employees.get(finalIllPerson2Index).getHiringDate());
                 }
+                System.out.println("Pressed ill today at index: "+row);
             }
         });
         illTodayList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
