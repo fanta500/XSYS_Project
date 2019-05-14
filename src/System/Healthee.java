@@ -114,7 +114,7 @@ public class Healthee {
                 openMainScreen();
                 System.out.println("Home button pressed");
                 timeStamp = System.currentTimeMillis() - startTime;
-                System.out.println("Timestamp: " + timeStamp + "\n \n");
+                System.out.println("Timestamp: " + timeStamp + "\n");
             }
         });
 
@@ -147,7 +147,7 @@ public class Healthee {
 
         //Sets up the text for total illness history
         JPanel mainCenterBottomLeft = new JPanel(new BorderLayout());
-        JTextArea illnessHistoryTextArea = new JTextArea("Total Illness History");
+        JTextArea illnessHistoryTextArea = new JTextArea("Combined Illness History for all Employees");
         illnessHistoryTextArea.setFont(new Font("P", Font.PLAIN, 24)); //Setting font size
         illnessHistoryTextArea.setEditable(false); //Making details non-editable
         illnessHistoryTextArea.setOpaque(false); //Remove the white backdrop
@@ -157,7 +157,7 @@ public class Healthee {
 
         //Sets up the text for sickness on weekday
         JPanel mainCenterBottomRight = new JPanel(new BorderLayout());
-        JTextArea sicknessOnWeekdayTextArea = new JTextArea("Sickness on Weekday");
+        JTextArea sicknessOnWeekdayTextArea = new JTextArea("Combined Illness Distribution for all Employees");
         sicknessOnWeekdayTextArea.setFont(new Font("P", Font.PLAIN, 24)); //Setting font size
         sicknessOnWeekdayTextArea.setEditable(false); //Making details non-editable
         sicknessOnWeekdayTextArea.setOpaque(false); //Remove the white backdrop
@@ -182,13 +182,13 @@ public class Healthee {
                     specificEmployeePanel.setVisible(true);
                     System.out.println("Return to an employee button pressed");
                     timeStamp = System.currentTimeMillis() - startTime;
-                    System.out.println("Timestamp: " + timeStamp + "\n \n");
+                    System.out.println("Timestamp: " + timeStamp + "\n");
                 } else if (lastView.equals("Illness History")) {
                     mainPanel.setVisible(false);
                     openTotalIllnessHistory();
                     System.out.println("Return to total illness history button pressed");
                     timeStamp = System.currentTimeMillis() - startTime;
-                    System.out.println("Timestamp: " + timeStamp + "\n \n");
+                    System.out.println("Timestamp: " + timeStamp + "\n");
                 }
             }
         });
@@ -258,7 +258,7 @@ public class Healthee {
                 drawMainScreenGraphs();
                 System.out.println("Clicked time frame list at index: "+(index+1));
                 timeStamp = System.currentTimeMillis() - startTime;
-                System.out.println("Timestamp: " + timeStamp + "\n \n");
+                System.out.println("Timestamp: " + timeStamp + "\n");
             }
         });
     }
@@ -398,7 +398,7 @@ public class Healthee {
                                      employees.get(row).getHiringDate());
                 System.out.println("Pressed employee list at index: "+(row+1));
                 timeStamp = System.currentTimeMillis() - startTime;
-                System.out.println("Timestamp: " + timeStamp + "\n \n");
+                System.out.println("Timestamp: " + timeStamp + "\n");
             }
         });
         employeeList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -453,7 +453,7 @@ public class Healthee {
                 }
                 System.out.println("Pressed ill today at index: "+(row+1));
                 timeStamp = System.currentTimeMillis() - startTime;
-                System.out.println("Timestamp: " + timeStamp + "\n \n");
+                System.out.println("Timestamp: " + timeStamp + "\n");
             }
         });
         illTodayList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
