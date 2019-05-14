@@ -72,6 +72,11 @@ public class Healthee {
     private Employee emp6;
     private Employee emp7;
 
+    //TESTING
+    private long startTime = System.currentTimeMillis();
+    private long timeStamp;
+
+
     private Healthee() {
         //INIT SYSTEMS
         specificEmployee = new SpecificEmployee();
@@ -108,6 +113,8 @@ public class Healthee {
             public void actionPerformed(ActionEvent e) {
                 openMainScreen();
                 System.out.println("Home button pressed");
+                timeStamp = System.currentTimeMillis() - startTime;
+                System.out.println("Timestamp: " + timeStamp + "\n \n");
             }
         });
 
@@ -174,10 +181,14 @@ public class Healthee {
                     window.setContentPane(specificEmployeePanel);
                     specificEmployeePanel.setVisible(true);
                     System.out.println("Return to an employee button pressed");
+                    timeStamp = System.currentTimeMillis() - startTime;
+                    System.out.println("Timestamp: " + timeStamp + "\n \n");
                 } else if (lastView.equals("Illness History")) {
                     mainPanel.setVisible(false);
                     openTotalIllnessHistory();
                     System.out.println("Return to total illness history button pressed");
+                    timeStamp = System.currentTimeMillis() - startTime;
+                    System.out.println("Timestamp: " + timeStamp + "\n \n");
                 }
             }
         });
@@ -245,7 +256,9 @@ public class Healthee {
 
                 }
                 drawMainScreenGraphs();
-                System.out.println("Clicked time frame list at index: "+index);
+                System.out.println("Clicked time frame list at index: "+(index+1));
+                timeStamp = System.currentTimeMillis() - startTime;
+                System.out.println("Timestamp: " + timeStamp + "\n \n");
             }
         });
     }
@@ -383,7 +396,9 @@ public class Healthee {
                                      employees.get(row).getSickDays(),
                                      timeFrameList.getSelectedIndex(),
                                      employees.get(row).getHiringDate());
-                System.out.println("Pressed employee list at index: "+row);
+                System.out.println("Pressed employee list at index: "+(row+1));
+                timeStamp = System.currentTimeMillis() - startTime;
+                System.out.println("Timestamp: " + timeStamp + "\n \n");
             }
         });
         employeeList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -436,7 +451,9 @@ public class Healthee {
                             timeFrameList.getSelectedIndex(),
                             employees.get(finalIllPerson2Index).getHiringDate());
                 }
-                System.out.println("Pressed ill today at index: "+row);
+                System.out.println("Pressed ill today at index: "+(row+1));
+                timeStamp = System.currentTimeMillis() - startTime;
+                System.out.println("Timestamp: " + timeStamp + "\n \n");
             }
         });
         illTodayList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
